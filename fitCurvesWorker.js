@@ -1,4 +1,4 @@
-/*global self: false */
+/*global self, Math*/
 /*jslint evil: true, todo: true */
 
 // TODO: check user input...
@@ -7,7 +7,7 @@
     'use strict';
 
     //variable declarations
-    var fmincon, determineRunningConditions, binomialDict;
+    var fmincon, determineRunningConditions, runsTest;
 
     //variable definitions
 
@@ -15,7 +15,7 @@
     fmincon = (function () {
         //please note - this is a minimized version of fmincon from amdjs_1.1.0.js
         //variable declarations
-        var binomialProb, combine, factorialDivide, factorial, sqrSumOfErrors, sqrSumOfDeviations, func, binomialFit;
+        var sqrSumOfErrors, sqrSumOfDeviations, func;
 
         //variable defintions
 
@@ -64,7 +64,7 @@
             SSDTot = sqrSumOfDeviations(y);
             SSETot = sqrSumOfErrors(fun, X, y, x0);
             corrIsh = 1 - SSETot / SSDTot;
-            return {parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, binomFit: binomialFit(fun, X, y, x0)};
+            return {parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
         };
 
         sqrSumOfErrors = function (fun, X, y, x0) {
@@ -95,58 +95,6 @@
             return error;
         };
 
-        binomialFit = function (fun, X, y, x0) {
-            var i, res1, res2, count = 0, tot = y.length - 1;
-            for (i = 0; i < tot; i += 1) {
-                res1 = fun(X[i], x0) - y[i];
-                res2 = fun(X[i + 1], x0) - y[i + 1];
-                if (res1 * res2 <= 0) {
-                    count += 1;
-                }
-            }
-
-            return binomialProb(tot, count);
-        };
-
-        binomialProb = function (n, end) {
-            var i, sol = 0, prob = 0.5; // Since this is my measure of goodness of fit, I set prob=0.5.
-
-            //If it is predefined (should be for all in the standard data set)
-            if (binomialDict.hasOwnProperty(n) && binomialDict[n].hasOwnProperty(end)) {
-                return binomialDict[n][end];
-            }
-
-            //Else actually calculate it.
-            for (i = 0; i <= end; i += 1) {
-                sol += combine(n, i) * Math.pow(prob, n);
-            }
-            return sol;
-        };
-
-        combine = function (n, r) {
-            return factorialDivide(n, Math.max(n - r, r)) / factorial(Math.min(n - r, r));
-        };
-
-        factorialDivide = function (top, bottom) {
-            var i, sol = 1;
-            if (top < bottom) {
-                return NaN;
-            }
-            for (i = top; i > bottom; i += -1) {
-                sol *= i;
-            }
-            return sol;
-        };
-
-        factorial = function (x) {
-            var ret = 1, i;
-            if (x >= 1) {
-                for (i = x; i > 1; i -= 1) {
-                    ret = ret * i;
-                }
-            }
-            return ret;
-        };
 
         //return function
         return func;
@@ -183,8 +131,94 @@
         self.postMessage([event.data[0], result]);
     };
 
+    runsTest = (function () {
+        var main, combineDict, runsPDF, factorial, factorialDivide, combine;
 
-    //This is the binomial presolved dictionary based on p=0.5 from n->i
-    binomialDict = {"0": {"0": 1}, "1": {"0": 0.5, "1": 1}, "2": {"0": 0.25, "1": 0.75, "2": 1}, "3": {"0": 0.125, "1": 0.5, "2": 0.875, "3": 1}, "4": {"0": 0.0625, "1": 0.3125, "2": 0.6875, "3": 0.9375, "4": 1}, "5": {"0": 0.03125, "1": 0.1875, "2": 0.5, "3": 0.8125, "4": 0.96875, "5": 1}, "6": {"0": 0.015625, "1": 0.109375, "2": 0.34375, "3": 0.65625, "4": 0.890625, "5": 0.984375, "6": 1}, "7": {"0": 0.0078125, "1": 0.0625, "2": 0.2265625, "3": 0.5, "4": 0.7734375, "5": 0.9375, "6": 0.9921875, "7": 1}, "8": {"0": 0.00390625, "1": 0.03515625, "2": 0.14453125, "3": 0.36328125, "4": 0.63671875, "5": 0.85546875, "6": 0.96484375, "7": 0.99609375, "8": 1}, "9": {"0": 0.001953125, "1": 0.01953125, "2": 0.08984375, "3": 0.25390625, "4": 0.5, "5": 0.74609375, "6": 0.91015625, "7": 0.98046875, "8": 0.998046875, "9": 1}, "10": {"0": 0.0009765625, "1": 0.0107421875, "2": 0.0546875, "3": 0.171875, "4": 0.376953125, "5": 0.623046875, "6": 0.828125, "7": 0.9453125, "8": 0.9892578125, "9": 0.9990234375, "10": 1}, "11": {"0": 0.00048828125, "1": 0.005859375, "2": 0.03271484375, "3": 0.11328125, "4": 0.2744140625, "5": 0.5, "6": 0.7255859375, "7": 0.88671875, "8": 0.96728515625, "9": 0.994140625, "10": 0.99951171875, "11": 1}, "12": {"0": 0.000244140625, "1": 0.003173828125, "2": 0.019287109375, "3": 0.072998046875, "4": 0.19384765625, "5": 0.38720703125, "6": 0.61279296875, "7": 0.80615234375, "8": 0.927001953125, "9": 0.980712890625, "10": 0.996826171875, "11": 0.999755859375, "12": 1}};
+        main = function (func, X, y, p0) {
+            //Variable declaration
+            var i, signC, signL, counts, typeRuns, current, tot;
+
+            //Variable assignment
+            counts = [1, 0];
+            typeRuns = [1, 0];
+            current = 0;
+            tot = X.length;
+
+            //Count the number of switches and runs of (-) versus (+)
+            //Note since runs(n1, n2, r) == runs(n2, n1, r) it is not important the direction, just the number of switches
+            //Initialize the 'last' sign, actual - predicted
+            signL = y[0] - func(X[0], p0);
+            for (i = 1; i < tot; i += 1) {
+                //Calculate this sign actual - predicted
+                signC = y - func(X[i], p0);
+                if (signC * signL <= 0) { // This means if the model is ever perfect, it counts as a switch
+                    //Switch current from 0->1 or 1->0
+                    current = (current + 1) % 2;
+
+                    //Increment the number of runs for this type, note type '0' began with 1
+                    typeRuns[current] += 1;
+                }
+                //Current count incriment, reasign the 'last' sign
+                counts[current] += 1;
+                signL = signC;
+
+            }
+
+            //Actually calculate the runs PDF
+            return runsPDF(counts[0], counts[1], typeRuns[0] + typeRuns[1]);
+        };
+
+        runsPDF = function (n1, n2, r) {
+            var sol;
+            if (r < 2) { // This only works for r >= 2.
+                sol = 0;
+            } else if (r % 2) { // odd
+                sol = (combine(n1 - 1, (r - 1) / 2) * combine(n2 - 1, (r - 3) / 2) + combine(n1 - 1, (r - 3) / 2) * combine(n2 - 1, (r - 1) / 2)) / combine(n1 + n2, n1);
+            } else { //even
+                sol = 2 * combine(n1 - 1, r / 2 - 1) * combine(n2 - 1, r / 2 - 1) / combine(n1 + n2, n1);
+            }
+            return sol;
+        };
+
+        combine = function (n, r) {
+            var sol;
+            if (r > n) {
+                sol = 0;
+            } else if (combineDict.hasOwnProperty(n)) {
+                if (combineDict[n].hasOwnProperty(r)) {
+                    sol = combineDict[n][r];
+                }
+            } else {
+                sol = factorialDivide(n, Math.max(n - r, r)) / factorial(Math.min(n - r, r));
+            }
+            return sol;
+        };
+
+        factorial = function (x) {
+            var ret = 1, i;
+            if (x >= 1) {
+                for (i = x; i > 1; i -= 1) {
+                    ret = ret * i;
+                }
+            }
+            return ret;
+        };
+
+        factorialDivide = function (top, bottom) {
+            var i, sol = 1;
+            //Note: By the nature of previous screening the top >= bottom, however this will not work without
+                // dealing with the opposite posibility if migrated to other locations
+            for (i = top; i > bottom; i += -1) {
+                sol *= i;
+            }
+            return sol;
+        };
+
+
+        //This is the presolved combination dictionary from 1->13, the limit of my use for this, could easily be expanded, however it will increase load time.
+        combineDict = { 1: { 0: 1, 1: 1 }, 2: { 0: 1, 1: 2, 2: 1 }, 3: { 0: 1, 1: 3, 2: 3, 3: 1 }, 4: { 0: 1, 1: 4, 2: 6, 3: 4, 4: 1 }, 5: { 0: 1, 1: 5, 2: 10, 3: 10, 4: 5, 5: 1 }, 6: { 0: 1, 1: 6, 2: 15, 3: 20, 4: 15, 5: 6, 6: 1 }, 7: { 0: 1, 1: 7, 2: 21, 3: 35, 4: 35, 5: 21, 6: 7, 7: 1 }, 8: { 0: 1, 1: 8, 2: 28, 3: 56, 4: 70, 5: 56, 6: 28, 7: 8, 8: 1 }, 9: { 0: 1, 1: 9, 2: 36, 3: 84, 4: 126, 5: 126, 6: 84, 7: 36, 8: 9, 9: 1 }, 10: { 0: 1, 1: 10, 2: 45, 3: 120, 4: 210, 5: 252, 6: 210, 7: 120, 8: 45, 9: 10, 10: 1 }, 11: { 0: 1, 1: 11, 2: 55, 3: 165, 4: 330, 5: 462, 6: 462, 7: 330, 8: 165, 9: 55, 10: 11, 11: 1 }, 12: { 0: 1, 1: 12, 2: 66, 3: 220, 4: 495, 5: 792, 6: 924, 7: 792, 8: 495, 9: 220, 10: 66, 11: 12, 12: 1 }, 13: { 0: 1, 1: 13, 2: 78, 3: 286, 4: 715, 5: 1287, 6: 1716, 7: 1716, 8: 1287, 9: 715, 10: 286, 11: 78, 12: 13, 13: 1 } };
+
+        return main;
+    }());
 
 }());
