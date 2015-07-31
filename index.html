@@ -26,7 +26,7 @@
 			the function as a string so set everything up perfectly and then put
 			it in quotes.
 			*/
-			var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3)return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
+			var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
 
 			var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
 
@@ -54,7 +54,7 @@ var eqObj = {
 	setInitial: function (x_mat, y_vec) {
 		// For other data, this must be made more intelligent
 		var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
-		var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3)
+		var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
         return [A, B];
 	},
@@ -65,7 +65,7 @@ While this seems odd, the best way to insure this works is to pass
 the function as a string so set everything up perfectly and then put
 it in quotes.
 */
-var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3)return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
+var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
 
 var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
 
