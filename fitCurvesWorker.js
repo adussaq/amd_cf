@@ -150,7 +150,8 @@
             signL = y[0] - func(X[0], p0);
             for (i = 1; i < tot; i += 1) {
                 //Calculate this sign actual - predicted
-                signC = y - func(X[i], p0);
+                signC = y[i] - func(X[i], p0);
+
                 if (signC * signL <= 0) { // This means if the model is ever perfect, it counts as a switch
                     //Switch current from 0->1 or 1->0
                     current = (current + 1) % 2;
