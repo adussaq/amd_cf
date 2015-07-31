@@ -103,7 +103,7 @@
     determineRunningConditions = function (object) {
         //variable declarations
         var i, X, xIni, yIni, length, equationObj;
-        equationObj = eval('equationObj=' + object.equation.string);
+        equationObj = eval('equationObj=' + object.equation);
         //variable defintions
         X = object.x_values;
         xIni = [];
@@ -112,7 +112,8 @@
 
         //determine what points are 'good'
         for (i = 0; i < length; i += 1) {
-            if (object.accurateData[i]) {
+            //if (object.accurateData[i]) { // This exists if 'accurate data' is being determined
+            if (length) {
                 xIni.push([X[i]]); // This is to be used for the curve fitting
                 yIni.push(object.y_values[i]);
             }
@@ -124,11 +125,11 @@
         //variable declarations
         var result, runCond;
         //variable definitions
-        runCond = determineRunningConditions(event.data[0]);
+        runCond = determineRunningConditions(event.data);
 
         result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y);
         //return result
-        self.postMessage([event.data[0], result]);
+        self.postMessage([event.data, result]);
     };
 
     runsTest = (function () {
