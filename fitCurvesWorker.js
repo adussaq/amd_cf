@@ -121,18 +121,6 @@
         return {params: equationObj.setInitial(xIni, yIni), X: xIni, y: yIni, func: equationObj.func};
     };
 
-    self.onmessage = function (event) {
-        //variable declarations
-        var result, runCond;
-        //variable definitions
-        runCond = determineRunningConditions(event.data);
-        self.postMessage([event.data]);
-        return;
-        result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y);
-        //return result
-        self.postMessage([event.data, result]);
-    };
-
     runsTest = (function () {
         var main, combineDict, runsPDF, factorial, factorialDivide, combine;
 
@@ -223,5 +211,17 @@
 
         return main;
     }());
+
+self.onmessage = function (event) {
+        //variable declarations
+        var result, runCond;
+        //variable definitions
+        runCond = determineRunningConditions(event.data);
+        self.postMessage([event.data]);
+        return;
+        result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y);
+        //return result
+        self.postMessage([event.data, result]);
+    };
 
 }());
