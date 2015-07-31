@@ -1,10 +1,45 @@
 <html>
 	<head>
 		<script src="workersPackage.js"></script>
+		<script>
+			/* Copy and paste the below to the console to set it up */
+			var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
+			var y1 = [1.47, 8.14, 27.13, 64.04, 125.39, 216.4, 343.46, 512.01, 729.11, 1000.15];
+			var y2 = [5.359999999999999, 19.28, 57.02, 131.27, 253.42, 435.37, 689.03, 1027.21, 1461.43, 2003.44];
+			/*
+			var eqObj = {
+				stringified: 'a * x ^ 3 + b',
+				func: function (xVector, P) {
+					return P[0] * Math.pow(xVector[0],3) + P[1];
+				},
+				setInitial: function (x_mat, y_vec) {
+					// For other data, this must be made more intelligent
+					var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
+					var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3)
+
+			        return [A, B];
+				},
+				description: 'For fitting two parameter Ax^3+B cubic function'
+			} 
+			/* 
+			While this seems odd, the best way to insure this works is to pass 
+			the function as a string so set everything up perfectly and then put
+			it in quotes.
+			*/
+			var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3)return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
+
+			var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
+
+			var data = {
+				x_values: X,
+				y_values: y1,
+				equation: eqStr,
+			}
+		</script>
 	</head>
 	<body>
 		<h2>Open the console to test curve fitting with web workers!</h2>
-		<b>Try the following in the console (set up):</b><br />
+		<b>The following is the set up, this has already been done for you!</b><br />
 		<pre><code>
 /* Copy and paste the below to the console to set it up */
 var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
@@ -39,7 +74,6 @@ var data = {
 	y_values: y1,
 	equation: eqStr,
 }
-
 		</code></pre>
 	<b>Actual Math:</b><br />
 		<pre><code>
