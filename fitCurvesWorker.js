@@ -126,7 +126,8 @@
         var result, runCond;
         //variable definitions
         runCond = determineRunningConditions(event.data);
-
+        self.postMessage([event.data]);
+        return;
         result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y);
         //return result
         self.postMessage([event.data, result]);
