@@ -1,6 +1,8 @@
 # amd_cf
 Non-linear curve fitting in javascript. Built to utilize javascript web workers via amd_ww (https://github.com/adussaq/amd_ww/).
 
+For a working example please go to: https://alexdussaq.info/amd_cf/
+
 Will flush out readme with specific instructions and transfer a small working example here.
 
 
