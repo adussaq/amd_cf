@@ -3,13 +3,13 @@
 
 var amd_cf = (function () {
     'use strict';
-    var isArray, main, $, checkjQ, checkWW, worker, workerScript, checkdata, loaded;
+    var isArray, main, $, checkjQ, checkWW, worker, workerScript, checkdata, gotten;
 
     //Note: This indicates that this package and fitCurvesWorkers must be in the same
     // Directory, if they are not, this location needs to be changed...
     workerScript = 'fitCurvesWorker.js';
     main = {};
-    loaded = false;
+    gotten = {};
 
     isArray = (function () {
         // Use compiler's own isArray when available
@@ -81,7 +81,7 @@ var amd_cf = (function () {
                 console.error('data.x_values must be an array of arrays, each array represents the X vector for each point.');
                 ret = false;
             }
-            if (!data.hasOwnProperty('equation') || typeof data.equation !== 'Object' || !loaded) {
+            if (!data.hasOwnProperty('equation') || typeof data.equation !== 'Object' || !data.equation.loaded) {
                 console.error('Equation must be loaded using "getEquation" function first');
             }
 
@@ -93,29 +93,47 @@ var amd_cf = (function () {
             if (!callback || typeof callback !== 'function') {
                 console.error('Callback function should be defined and utilized, this is done asynchronously.');
                 callback = function (eq) {
-                    loaded = true;
                     console.log('equation loaded', eq);
                 };
             }
-            $.ajax({
-                dataType: "json",
-                url: url,
-                complete: function (res) {
-                    var eq;
-                    eq = {};
-                    eval('eq = ' + res.responseText);
-                    callback(eq);
-                }
-            });
+            if (gotten[url]) {
+                callback(gotten[url]);
+            } else {
+                $.ajax({
+                    dataType: "json",
+                    url: url,
+                    complete: function (res) {
+                        var eq;
+                        eq = {};
+                        eval('eq = ' + res.responseText);
+                        eq.string = res.responseText;
+                        eq.loaded = true;
+                        gotten[url] = eq;
+                        callback(eq);
+                    }
+                });
+            }
         }
     };
 
     main.fitEquation = function (data, callback) {
         if (checkWW()) {
             if (checkdata(data)) {
+                //Sanitizes data, this has to be done for web workers
+                data = JSON.parse(JSON.stringify(data));
                 worker.submitJob(data, callback);
             }
         }
+    };
+
+    main.doneFitting = function (callback) {
+        if (!callback || typeof callback !== 'function') {
+            console.error('Callback function should be defined and utilized, this is done asynchronously.');
+            callback = function () {
+                console.log('All fitting completed!');
+            };
+        }
+        worker.onComplete(callback);
     };
 
     return main;
