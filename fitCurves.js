@@ -1,5 +1,5 @@
 /*global self, window, Math, amd_cf*/
-/*jslint todo: true */
+/*jslint todo: true evil:true */
 
 var amd_cf = (function () {
     'use strict';
@@ -97,8 +97,15 @@ var amd_cf = (function () {
                     console.log('equation loaded', eq);
                 };
             }
-            $.get(url, function (res) {
-                console.log(res);
+            $.ajax({
+                dataType: "json",
+                url: url,
+                complete: function (res) {
+                    var eq;
+                    eq = {};
+                    eval('eq = ' + res.responseText);
+                    callback(eq);
+                }
             });
         }
     };
