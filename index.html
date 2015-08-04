@@ -91,20 +91,13 @@ amd_cf.getEquation('simpleCubic.json', function(eq) {
 		console.log('Done With 2', res);
 	});
 
+	/* If a lot of fits are called, this will be called once all fitting is completed */
 	amd_cf.doneFitting(function() {
 		console.log('Done With All!');
 	});
 	
 })
 
-		</code></pre>
-	<b>Actual Math:</b><br />
-		<pre><code>
-
-worker.submitJob(data, function (res) {
-	//Returns the original object and the final parameters
-	console.log(res[0], res[1]);
-});
 		</code></pre>
 	</body>
 </html>
