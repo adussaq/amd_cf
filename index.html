@@ -1,6 +1,8 @@
 <html>
 	<head>
 		<script src="workersPackage.js"></script>
+		<script src ="jquery-2.1.4.min.js"></script>
+		<script src = "fitCurves.js"></script>
 		<script>
 			/* Copy and paste the below to the console to set it up */
 			var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
@@ -26,7 +28,7 @@
 			the function as a string so set everything up perfectly and then put
 			it in quotes.
 			*/
-			var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
+			var eqStr = "{stringified:'a * x ^ 3 + b',func:function(xVector,P){return P[0]*Math.pow(xVector[0],3)+P[1];},setInitial:function(x_mat,y_vec){var A=(y_vec[1]-y_vec[0])/(Math.pow(x_mat[1][0],3)-Math.pow(x_mat[0][0],3));var B=y_vec[0]-A*Math.pow(x_mat[0][0],3);return [A,B];},description:'For fitting two parameter Ax^3+B cubic function'}";
 
 			var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
 
@@ -65,13 +67,19 @@ While this seems odd, the best way to insure this works is to pass
 the function as a string so set everything up perfectly and then put
 it in quotes.
 */
-var eqStr = "{stringified: 'a * x ^ 3 + b',func: function (xVector, P) {return P[0] * Math.pow(xVector[0],3) + P[1];},setInitial: function (x_mat, y_vec) {var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);return [A, B];},description: 'For fitting two parameter Ax^3+B cubic function'}";
+var eqStr = "{stringified:'a * x ^ 3 + b',func:function(xVector,P){return P[0]*Math.pow(xVector[0],3)+P[1];},setInitial:function(x_mat,y_vec){var A=(y_vec[1]-y_vec[0])/(Math.pow(x_mat[1][0],3)-Math.pow(x_mat[0][0],3));var B=y_vec[0]-A*Math.pow(x_mat[0][0],3);return [A,B];},description:'For fitting two parameter Ax^3+B cubic function'}";
 
 var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
 
 var data = {
 	x_values: X,
 	y_values: y1,
+	equation: eqStr,
+}
+
+var data2 = {
+	x_values: X,
+	y_values: y2,
 	equation: eqStr,
 }
 		</code></pre>
