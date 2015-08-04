@@ -69,7 +69,7 @@ var amd_cf = (function () {
             ret = false;
         }
         if (ret) {
-            if (isArray(data.x_values) || isArray(data.y_values)) {
+            if (!isArray(data.x_values) || !isArray(data.y_values)) {
                 console.error('Both x_values and y_values must be arrays');
                 ret = false;
             }
@@ -77,15 +77,15 @@ var amd_cf = (function () {
                 console.error('The length of x_values and y_values must be the same');
                 ret = false;
             }
-            if (isArray(data.x_values[0])) {
+            if (!isArray(data.x_values[0])) {
                 console.error('data.x_values must be an array of arrays, each array represents the X vector for each point.');
                 ret = false;
             }
             if (!data.hasOwnProperty('equation') || typeof data.equation !== 'Object' || !data.equation.loaded) {
                 console.error('Equation must be loaded using "getEquation" function first');
             }
-
         }
+        return ret;
     };
 
     main.getEquation = function (url, callback) {
