@@ -81,8 +81,9 @@ var amd_cf = (function () {
                 console.error('data.x_values must be an array of arrays, each array represents the X vector for each point.');
                 ret = false;
             }
-            if (!data.hasOwnProperty('equation') || typeof data.equation !== 'Object' || !data.equation.loaded) {
+            if (!data.hasOwnProperty('equation') || typeof data.equation !== 'object' || !data.equation.loaded) {
                 console.error('Equation must be loaded using "getEquation" function first');
+                ret = false;
             }
         }
         return ret;
