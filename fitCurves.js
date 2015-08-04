@@ -3,13 +3,29 @@
 
 var amd_cf = (function () {
     'use strict';
-    var main, $, checkjQ, checkWW, worker, workerScript, checkdata, loaded;
+    var isArray, main, $, checkjQ, checkWW, worker, workerScript, checkdata, loaded;
 
     //Note: This indicates that this package and fitCurvesWorkers must be in the same
     // Directory, if they are not, this location needs to be changed...
     workerScript = 'fitCurvesWorker.js';
     main = {};
     loaded = false;
+
+    isArray = (function () {
+        // Use compiler's own isArray when available
+        if (Array.isArray) {
+            return Array.isArray;
+        }
+
+        // Retain references to variables for performance
+        // optimization
+        var objectToStringFn = Object.prototype.toString,
+            arrayToStringResult = objectToStringFn.call([]);
+
+        return function (subject) {
+            return objectToStringFn.call(subject) === arrayToStringResult;
+        };
+    }());
 
     checkjQ = function () {
         var ret;
@@ -40,7 +56,7 @@ var amd_cf = (function () {
 
     checkdata = function (data) {
         var ret = true;
-        if (!data.hasOwnProperty(x_values)) {
+        if (!data.hasOwnProperty('x_values')) {
             console.error('Must inlcude x_values as an property on data');
             ret = false;
         }
@@ -53,18 +69,19 @@ var amd_cf = (function () {
             ret = false;
         }
         if (ret) {
-            if (data.x_values.constructor !== Array || data.y_values.constructor !== Array) {
+            if (isArray(data.x_values) || isArray(data.y_values)) {
                 console.error('Both x_values and y_values must be arrays');
                 ret = false;
             }
             if (ret && data.x_values.length !== data.y_values.length) {
                 console.error('The length of x_values and y_values must be the same');
                 ret = false;
-            if (typeof data.x_values[0].constructor !== Array) {
+            }
+            if (isArray(data.x_values[0])) {
                 console.error('data.x_values must be an array of arrays, each array represents the X vector for each point.');
                 ret = false;
             }
-            if (!data.hasOwnProperty(equation) || typeof data.equation !== 'Object' || !loaded) {
+            if (!data.hasOwnProperty('equation') || typeof data.equation !== 'Object' || !loaded) {
                 console.error('Equation must be loaded using "getEquation" function first');
             }
 
@@ -92,7 +109,7 @@ var amd_cf = (function () {
                 worker.submitJob(data, callback);
             }
         }
-    }
+    };
 
     return main;
 
