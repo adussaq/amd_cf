@@ -68,7 +68,7 @@ var y2 = [5.359999999999999, 19.28, 57.02, 131.27, 253.42, 435.37, 689.03, 1027.
 </code></pre>
 <b>Copy and paste this into your console to run this functions.</b><br />
 <pre><code>
-/* This is done asynchronously */
+/* This is done asynchronously, start by grabbing your function of interest */
 amd_cf.getEquation('simpleCubic.json', function(eq) {
 	/* Set up your data */
 	var data1 = {
@@ -83,15 +83,19 @@ amd_cf.getEquation('simpleCubic.json', function(eq) {
 		equation: eq,
 	};
 
-	amd_cf.fitEquation(data1, function(res) {
+	//Fits the data asynchronously
+	amd_cf.fitEquation(data1, function(res, cleanOriginData) {
+		//cleanOriginData is the data with all functions removed
 		console.log('Done With 1', res);
 	});
 
-	amd_cf.fitEquation(data2, function(res) {
+	//Fits the data asynchronously
+	amd_cf.fitEquation(data2, function(res, cleanOriginData) {
+		//cleanOriginData is the data with all functions removed
 		console.log('Done With 2', res);
 	});
 
-	/* If a lot of fits are called, this will be called once all fitting is completed */
+	// If a lot of fits are called, this will be called once all fitting is completed
 	amd_cf.doneFitting(function() {
 		console.log('Done With All!');
 	});
