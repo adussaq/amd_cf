@@ -12,15 +12,15 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_obj__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
-|fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
+|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, string, this is the address of .json __equation_obj__, more information below*] and a **ge_callback** function [*Not required, function, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
 ###**Callback Functions**###
 |Function|Description|
 |---------------|----------------|
-|ge_callback|This function is passed the **equation_obj** asynchronously.|
-|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
+|ge_callback|This function is passed **equation_obj** [*object*] asynchronously.|
+|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and the original **data_obj** cleaned of functions.|
 
 
 ###data_obj###
