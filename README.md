@@ -4,10 +4,10 @@ For a working example please go to: https://alexdussaq.info/amd_cf/
 The same example is shown below and is included as index.html in this directory.
 
 This package allows for curve fitting to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. This requires a number of files:
-workersPackage.js (amd_ww)
-jquery-2.1.4.min.js (jQuery)
-.json (An equation outline file)
-fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
+-workersPackage.js (amd_ww)
+-jquery-2.1.4.min.js (jQuery)
+-.json (An equation outline file)
+-fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
 ###**Get Equation**###
 |Property|Description|
