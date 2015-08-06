@@ -12,15 +12,15 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 ###**Get Equation**###
 |Function|Description|
 |---------------|----------------|
-|getEquation|This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|amd_cf.getEquation|This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
 |ge_callback|This function is passed the equation_object asynchronously.|
 
 ###**Fit Equation**###
 |Function|Description|
 |---------------|----------------|
-|fitEquation|This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
+|amd_cf.fitEquation|This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
-|doneFitting|This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
+|amd_cf.doneFitting|This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
 ###data_obj###
 |Property|Description|
