@@ -6,32 +6,33 @@ The same example is shown below and is included as index.html in this directory.
 This package allows for curve fitting to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
 * workersPackage.js (amd_ww)
 * jquery-2.1.4.min.js (jQuery)
-* .json (An **equation_object**, described below)
+* .json (An **equation_obj**, described below)
 * fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
-###**Get Equation**###
-|Function|Description|
+###**amd_cf**###
+|Property|Description|
 |---------------|----------------|
-|amd_cf.getEquation|This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
-|ge_callback|This function is passed the equation_object asynchronously.|
+|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_obj__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
+|doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
-###**Fit Equation**###
+###**Callback Functions**###
 |Function|Description|
 |---------------|----------------|
-|amd_cf.fitEquation|This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
+|ge_callback|This function is passed the **equation_obj** asynchronously.|
 |fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
-|amd_cf.doneFitting|This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
+
 
 ###data_obj###
 |Property|Description|
 |---------------|----------------|
-|equation_object|[*required, object*] This is the object passed into the callback function for **getEquation*** and is described further below.
+|equation_obj|[*required, object*] This is the object passed into the callback function for **getEquation*** and is described further below.
 |x_values|[*required, 2D array of doubles*] X=[[x1],[x2],[x3]...[xn]], where y=f(X)*|
 |y_values|[*required, 1D array of doubles*] y, where y=f(X)|
 |fit_params|[*optional, object*] Described below, determines fitting conditions*]
 |bool|[*optional, 1D array of booleans*] Length equivalent to that of X and y, labels each (X,y) point as viable data, digested to a true/false boolean|
 
-###equation_object###
+###equation_obj###
 |Property|Description|
 |---------------|----------------|
 |step|[*optional*] function to determine stepping for curve fitting parameters ... |
