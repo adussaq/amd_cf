@@ -1,4 +1,4 @@
-# amd_cf - Work in Progress
+# amd_cf - This manual is a work in Progress
 
 For a working example please go to: https://alexdussaq.info/amd_cf/
 The same example is shown below and is included as index.html in this directory.
