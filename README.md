@@ -19,9 +19,8 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |Function|Description|
 |---------------|----------------|
 |fitEquation|This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
-|fe_callback|[*function*], this function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
-|fit_params|[*object*] Described bellow, the parameters that determine the end conditions for the minimization of least squares regression.|
-|doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
+|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
+|doneFitting|This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
 ###data_obj###
 |Property|Description|
