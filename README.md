@@ -12,7 +12,7 @@ fitCurves.js (amd_cf, requires all of the above, does the work of running the cu
 ###**Get Equation**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, this is the .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
 |ge_callback|[*function*] This function is passed the equation_object asynchronously.|
 
 ###**Fit Equation**###
