@@ -10,24 +10,38 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 * fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
 ###**Get Equation**###
-|Property|Description|
+|Function|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
-|ge_callback|[*function*] This function is passed the equation_object asynchronously.|
+|getEquation|This function takes two arguments, **eq_url** [*required, this is the address of .json __equation_object__, more information below*] and a **ge_callback** function [*Not required, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|ge_callback|This function is passed the equation_object asynchronously.|
 
 ###**Fit Equation**###
-|Property|Description|
+|Function|Description|
 |---------------|----------------|
-|fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
-|data_obj|[*object*] This object has several parameters: equation [*required, this is the object passed into the callback function for **getEquation***], x_values: [*required, this is an array of arrays, X=[[x1],[x2],[x3]...[xn]], where y=f(X)*], y_values: [*required, this is the array, y, where y=f(X)*], **fit_params**, [*optional object, described below*], bool, [*optional array with length equivalent to X and y*]|
+|fitEquation|This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |fe_callback|[*function*], this function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
-|fit_params|[*object*] The parameters that determine the end conditions for the minimization of least squares regression. Properties are: maxItt, [*maximum number of itterations before fitting is abandoned, default: 1000*], and minPer [*minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6*]|
+|fit_params|[*object*] Described bellow, the parameters that determine the end conditions for the minimization of least squares regression.|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
-###Equation Object###
+###data_obj###
+|Property|Description|
+|---------------|----------------|
+|equation_object|[*required, object*] This is the object passed into the callback function for **getEquation*** and is described further below.
+|x_values|[*required, 2D array of doubles*] X=[[x1],[x2],[x3]...[xn]], where y=f(X)*|
+|y_values|[*required, 1D array of doubles*] y, where y=f(X)|
+|fit_params|[*optional, object*] Described below, determines fitting conditions*]
+|bool|[*optional, 1D array of booleans*] Length equivalent to that of X and y, labels each (X,y) point as viable data, digested to a true/false boolean|
+
+###equation_object###
 |Property|Description|
 |---------------|----------------|
 |step|[*optional*] function to determine stepping for curve fitting parameters ... |
+
+###fit_params###
+|Property|Description|
+|---------------|----------------|
+|maxItt|[*integer*] Maximum number of itterations before fitting is abandoned, default: 1000|
+|minPer|[*float*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
 
 ##Example of how to utilize tool.##
     // Data set up
