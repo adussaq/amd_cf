@@ -100,4 +100,4 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
         description: 'For fitting two parameter Ax^3+B cubic function'
     }
 
-These modules were combined with the following visualization libraries: google chart tools (https://developers.google.com/chart/), jqmath (http://mathscribe.com/author/jqmath.html), bootstrap (http://getbootstrap.com/) and jquery (http://jquery.com/) to create a tool to visualize individual curve fits for a unique biological data set. This is avaliable at http://kinome.github.io/demo-cf/#model.
+These modules were combined with the following visualization libraries: google chart tools (https://developers.google.com/chart/), jqmath (http://mathscribe.com/author/jqmath.html), and bootstrap (http://getbootstrap.com/) to create a tool to visualize individual curve fits for a unique biological data set. This is avaliable at http://kinome.github.io/demo-cf/#model.
