@@ -21,8 +21,13 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |data_obj|[*object*] This object has several parameters: equation [*required, this is the object passed into the callback function for **getEquation***], x_values: [*required, this is an array of arrays, X=[[x1],[x2],[x3]...[xn]], where y=f(X)*], y_values: [*required, this is the array, y, where y=f(X)*], **fit_params**, [*optional object, described below*], bool, [*optional array with length equivalent to X and y*]|
 |fe_callback|[*function*], this function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and **data_obj**|
-|fit_params|[*object*] The parameters that determine the end conditions for the minimization of least squares regression. Properties are: step [*optional, fraction of initial parameters to take initial step with, default 1/100*], maxItt, [*maximum number of itterations before fitting is abandoned, default: 1000*], and minPer [*minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6*]|
+|fit_params|[*object*] The parameters that determine the end conditions for the minimization of least squares regression. Properties are: maxItt, [*maximum number of itterations before fitting is abandoned, default: 1000*], and minPer [*minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
+
+###Equation Object###
+|Property|Description|
+|---------------|----------------|
+|step|[*optional*] function to determine stepping for curve fitting parameters ... |
 
 ##Example of how to utilize tool.##
     // Data set up
