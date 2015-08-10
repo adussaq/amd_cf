@@ -58,7 +58,7 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 |---------------|----------------|
 |maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
 |minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
-|**step|[*function, optional*] This function has|
+|**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
 **Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
 
