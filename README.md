@@ -65,10 +65,10 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 
 ##Example of how to utilize tool.##
     // Data set up
-       var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
-       var y1 = [1.47, 8.14, 27.13, 64.04, 125.39, 216.4, 343.46, 512.01, 729.11, 1000.15];
-       var y2 = [5.359999999999999, 19.28, 57.02, 131.27, 253.42, 435.37, 689.03, 1027.21, 1461.43, 2003.44];
-       
+    var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
+    var y1 = [1.33, 9.15, 28.68, 60.3, 119.59, 224.1, 337.98, 528.93, 708.75, 1021.79];
+    var y2 = [4.81, 20.5, 54.56, 137.46, 252.65, 430.23, 679.79, 1053.03, 1446.35, 2009.69];2003.44];
+
     var data1 = {
         x_values: X,
         y_values: y1,
@@ -81,24 +81,24 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
         equation: eq,
     };
 
-	var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
+    var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 
-	//Fits the data asynchronously
-	eq_obj.fitEquation(data1, function(res, cleanOriginData) {
-		//cleanOriginData is the data with all functions removed
-		console.log('Done With 1', res);
-	});
+    //Fits the data asynchronously
+    eq_obj.fitEquation(data1, function(res, cleanOriginData) {
+        //cleanOriginData is the data with all functions removed
+        console.log('Done With 1', res);
+    });
 
-	//Fits the data asynchronously
-	eq_obj.fitEquation(data2, function(res, cleanOriginData) {
-		//cleanOriginData is the data with all functions removed
-		console.log('Done With 2', res);
-	});
+    //Fits the data asynchronously
+    eq_obj.fitEquation(data2, function(res, cleanOriginData) {
+        //cleanOriginData is the data with all functions removed
+        console.log('Done With 2', res);
+    });
 
-	// If a lot of fits are called, this will be called once all fitting is completed
-	eq_obj.doneFitting(function() {
-		console.log('Done With All!');
-	});
+    // If a lot of fits are called, this will be called once all fitting is completed
+    eq_obj.doneFitting(function() {
+        console.log('Done With All!');
+    });
 
 ##simpleCubic.jsonp##
     {
