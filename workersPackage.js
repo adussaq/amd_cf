@@ -99,7 +99,7 @@ var amd_ww = (function () {
     createWorkerObj = function (start_obj) {
         //Declare local vars
         var clearWorkers, finishFunction, jobsArray, sublib, setFinishFunction, paused,
-            startJob, submitJob, post_callback, workersArr, onComplete, nextJob;
+            startJob, submitJob, post_callback, workersArr, onComplete, nextJob, superPause;
 
         //Define local vars
         onComplete = function () {
@@ -109,6 +109,7 @@ var amd_ww = (function () {
         sublib = {};
         workersArr = [];
         paused = false;
+        superPause = false;
 
         //Global function declarations
         sublib.clearWorkers = function (callback) {
@@ -162,6 +163,15 @@ var amd_ww = (function () {
 
             //Run the actual program
             run(submitJob)(job, callback);
+        };
+
+        sublib.pause = function () {
+            superPause = true;
+        };
+
+        sublib.resume = function () {
+            superPause = false;
+            startJob();
         };
 
         //Local functions
@@ -225,7 +235,7 @@ var amd_ww = (function () {
                 //submitted
 
             //Make sure we are not paused
-            if (paused) {
+            if (paused || superPause) {
                 workersArr[workerToStart][1] = false;
                 post_callback();
                 return;

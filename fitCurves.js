@@ -3,7 +3,7 @@
 
 var amd_cf = (function () {
     'use strict';
-    var isArray, main, $, checkjQ, checkWW, worker, workerScript, checkdata, gotten;
+    var isArray, main, $, checkjQ, workerScript, checkdata, gotten, createRetObj;
 
     //Note: This indicates that this package and fitCurvesWorkers must be in the same
     // Directory, if they are not, this location needs to be changed...
@@ -34,21 +34,6 @@ var amd_cf = (function () {
             ret = true;
         } else {
             console.error('jQuery is required for this add on package.');
-            ret = false;
-        }
-        return ret;
-    };
-
-    checkWW = function () {
-        var ret;
-        if (window.amd_ww) {
-            worker = window.amd_ww.startWorkers({filename: workerScript});
-            checkWW = function () {
-                return true;
-            };
-            ret = true;
-        } else {
-            console.error('amd_ww is required for this curve fitting, download at: https://github.com/adussaq/amd_ww/');
             ret = false;
         }
         return ret;
@@ -90,35 +75,28 @@ var amd_cf = (function () {
     };
 
     main.getEquation = function (url, callback) {
+        var ret;
         if (checkjQ()) {
             if (!callback || typeof callback !== 'function') {
-                console.error('Callback function should be defined and utilized, this is done asynchronously.');
+                console.warn('Callback function should be defined and utilized, this is done asynchronously.');
                 callback = function (eq) {
                     console.log('equation loaded', eq);
                 };
             }
-            if (gotten[url]) {
-                callback(gotten[url]);
-            } else {
-                $.ajax({
-                    dataType: "json",
-                    url: url,
-                    complete: function (res) {
-                        var eq;
-                        eq = {};
-                        eval('eq = ' + res.responseText);
-                        eq.string = res.responseText;
-                        eq.loaded = true;
-                        gotten[url] = eq;
-                        callback(eq);
-                    }
-                });
-            }
+            //Return an object with fit equations and done fitting equations attached.
+            ret = createRetObj(url, callback);
+        } else {
+            ret = false;
         }
+        return ret;
     };
 
-    main.fitEquation = function (data, callback) {
-        if (checkWW()) {
+    createRetObj = function (url, callback) {
+        var retObj, fitEquation, doneFitting, worker, checkWW;
+
+        retObj = {};
+
+        fitEquation = function (data, callback) {
             if (checkdata(data)) {
                 //Sanitizes data, this has to be done for web workers
                 data = JSON.parse(JSON.stringify(data));
@@ -127,18 +105,66 @@ var amd_cf = (function () {
                     callback(res.data[1], res.data[0]);
                 });
             }
+        };
+
+        checkWW = function () {
+            var ret;
+            if (window.amd_ww) {
+                worker = window.amd_ww.startWorkers({filename: workerScript});
+                worker.pause();
+                checkWW = function () {
+                    return true;
+                };
+                ret = true;
+            } else {
+                throw 'amd_ww is required for this curve fitting, download at: https://github.com/adussaq/amd_ww/';
+            }
+            return ret;
+        };
+
+        doneFitting = function (callback) {
+            if (!callback || typeof callback !== 'function') {
+                console.error('Callback function should be defined and utilized, this is done asynchronously.');
+                callback = function () {
+                    console.log('All fitting completed!');
+                };
+            }
+            worker.onComplete(callback);
+        };
+
+        checkWW();
+        //set out ajax call as needed for url
+        if (gotten[url]) {
+            retObj.equation = gotten[url];
+            worker.resume();
+            callback(gotten[url]);
+        } else {
+            $.ajax({
+                dataType: "json",
+                url: url,
+                complete: function (res) {
+                    var eq;
+                    eq = {};
+                    eval('eq = ' + res.responseText);
+                    eq.string = res.responseText;
+                    eq.loaded = true;
+                    gotten[url] = eq;
+                    retObj.equation = eq;
+                    worker.resume();
+                    callback(eq);
+                }
+            });
         }
+
+        retObj.fitEquation = fitEquation;
+        retObj.doneFitting = doneFitting;
+        retObj.url = url;
+
+
+        return retObj;
+
     };
 
-    main.doneFitting = function (callback) {
-        if (!callback || typeof callback !== 'function') {
-            console.error('Callback function should be defined and utilized, this is done asynchronously.');
-            callback = function () {
-                console.log('All fitting completed!');
-            };
-        }
-        worker.onComplete(callback);
-    };
 
     return main;
 
