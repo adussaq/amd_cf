@@ -1,5 +1,5 @@
 {
-    stringified: "a * x ^ 3 + b"
+    stringified: "a * x ^ 3 + b",
     func: function (xVector, P) {
         return P[0] * Math.pow(xVector[0],3) + P[1];
     },
