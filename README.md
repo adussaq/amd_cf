@@ -34,6 +34,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 
 ###equation_obj###
 This is a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp. This is required for every function type that is to be fit.
+
 |Property|Description|
 |---------------|----------------|
 |**func|[*function, required*] This function must be set up to take two parameters: an X matrix (array of arrays) and a parameter vector. It should use these inputs to calculate a 'y' value and return a single number.|
@@ -43,7 +44,8 @@ This is a complicated object, for a full example please see: https://github.com/
 **Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
 
 ###fit_params###
-This optional object will overwrite the default and the func_fit_params when possible. 
+This optional object will overwrite the default and the func_fit_params when possible.
+
 |Property|Description|
 |---------------|----------------|
 |maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
@@ -51,6 +53,7 @@ This optional object will overwrite the default and the func_fit_params when pos
 
 ###func_fit_params###
 This optional object is set in a non dynamic fashion as part of the jsonp equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
+
 |Property|Description|
 |---------------|----------------|
 |maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
