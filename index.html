@@ -69,39 +69,36 @@ var y2 = [5.359999999999999, 19.28, 57.02, 131.27, 253.42, 435.37, 689.03, 1027.
 <b>Copy and paste this into your console to run this functions.</b><br />
 <pre><code>
 /* This is done asynchronously, start by grabbing your function of interest */
-amd_cf.getEquation('simpleCubic.json', function(eq) {
-	/* Set up your data */
-	var data1 = {
-		x_values: X,
-		y_values: y1,
-		equation: eq,
-	};
 
-	var data2 = {
-		x_values: X,
-		y_values: y2,
-		equation: eq,
-	};
+var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 
-	//Fits the data asynchronously
-	amd_cf.fitEquation(data1, function(res, cleanOriginData) {
-		//cleanOriginData is the data with all functions removed
-		console.log('Done With 1', res);
-	});
+/* Set up your data */
+var data1 = {
+	x_values: X,
+	y_values: y1,
+};
 
-	//Fits the data asynchronously
-	amd_cf.fitEquation(data2, function(res, cleanOriginData) {
-		//cleanOriginData is the data with all functions removed
-		console.log('Done With 2', res);
-	});
+var data2 = {
+	x_values: X,
+	y_values: y2,
+};
 
-	// If a lot of fits are called, this will be called once all fitting is completed
-	amd_cf.doneFitting(function() {
-		console.log('Done With All!');
-	});
-	
-})
+//Fits the data asynchronously
+eq_obj.fitEquation(data1, function(res, cleanOriginData) {
+	//cleanOriginData is the data with all functions removed
+	console.log('Done With 1', res);
+});
 
+//Fits the data asynchronously
+eq_obj.fitEquation(data2, function(res, cleanOriginData) {
+	//cleanOriginData is the data with all functions removed
+	console.log('Done With 2', res);
+});
+
+// If a lot of fits are called, this will be called once all fitting is completed
+eq_obj.doneFitting(function() {
+	console.log('Done With All!');
+});
 		</code></pre>
 	</body>
 </html>

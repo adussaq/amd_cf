@@ -62,10 +62,6 @@ var amd_cf = (function () {
                 console.error('data.x_values must be an array of arrays, each array represents the X vector for each point.');
                 ret = false;
             }
-//             if (!data.hasOwnProperty('equation') || typeof data.equation !== 'object' || !data.equation.loaded) {
-//                 console.error('Equation must be loaded using "getEquation" function first');
-//                 ret = false;
-//             }
         }
         return ret;
     };
@@ -74,9 +70,8 @@ var amd_cf = (function () {
         var ret;
         if (checkjQ()) {
             if (!callback || typeof callback !== 'function') {
-                console.warn('Callback function should be defined and utilized, this is done asynchronously.');
                 callback = function (eq) {
-                    console.log('equation loaded', eq);
+                    return eq;
                 };
             }
             //Return an object with fit equations and done fitting equations attached.
@@ -132,7 +127,6 @@ var amd_cf = (function () {
         checkWW();
         //set out ajax call as needed for url
         if (gotten[url]) {
-            
             //Assign by property so it is passed by reference
             for (prop in gotten[url]) {
                 if (gotten[url].hasOwnProperty(prop)) {
@@ -152,7 +146,7 @@ var amd_cf = (function () {
                     eq.string = res.responseText;
                     eq.loaded = true;
                     gotten[url] = eq;
-                    
+
                     //Assign by property so it is passed by reference
                     for (prop in eq) {
                         if (eq.hasOwnProperty(prop)) {
@@ -171,7 +165,6 @@ var amd_cf = (function () {
 
 
         return retObj;
-
     };
 
 
