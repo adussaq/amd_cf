@@ -10,5 +10,5 @@
 
         return [A, B];
     },
-    description: 'For fitting two parameter Ax^3+B cubic function'
+    description:  'For fitting two parameter Ax^3+B cubic function'
 }
