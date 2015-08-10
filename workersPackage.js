@@ -187,19 +187,17 @@ var amd_ww = (function () {
             //local variables
             var i;
 
-            console.log('reached here pc');
             //Make sure that all the workers are done
             for (i = 0; i < workersArr.length; i += 1) {
                 if (workersArr[i][1]) {
                     return;
                 }
             }
-            console.log('reached here pc2');
             if (typeof finishFunction === 'function') {
-                console.log('reached here pc3');
                 finishFunction();
                 finishFunction = undefined;
                 paused = false;
+                nextJob();
             }
         };
 
@@ -228,6 +226,7 @@ var amd_ww = (function () {
 
             //Make sure we are not paused
             if (paused) {
+                workersArr[workerToStart][1] = false;
                 post_callback();
                 return;
             }
@@ -251,7 +250,6 @@ var amd_ww = (function () {
 
             //Post the message to the worker
             if (typeof message === "string" && message === '&&&onComplete&&&') {
-                console.log('reached here');
                 paused = true;
                 workersArr[workerToStart][1] = false;
                 finishFunction = callback;
