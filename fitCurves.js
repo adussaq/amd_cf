@@ -88,16 +88,15 @@ var amd_cf = (function () {
     };
 
     createRetObj = function (url, callback) {
-        var retObj, fitEquation, doneFitting, worker, checkWW, obj_eq;
+        var retObj, fitEquation, doneFitting, worker, checkWW, prop;
 
         retObj = {};
-        obj_eq = {};
-        obj_eq.eq = {}; // This is to pass things by reference
+        retObj.equation = {}; // This is to pass things by reference
 
         fitEquation = function (data, callback) {
             if (checkdata(data)) {
                 //Sanitizes data, this has to be done for web workers
-                data.equation = obj_eq.eq;
+                data.equation = retObj.equation;
                 data = JSON.parse(JSON.stringify(data));
                 worker.submitJob(data, function (res) {
                     //This will return the results of the analysis and the original data
@@ -135,7 +134,12 @@ var amd_cf = (function () {
         //set out ajax call as needed for url
         if (gotten[url]) {
             retObj.equation = gotten[url];
-            obj_eq.eq = gotten[url];
+            //Assign by property so it is passed by reference
+            for (prop in gotten[url]) {
+                if (gotten[url].hasOwnProperty(prop)) {
+                    retObj.equation[prop] = gotten[url][prop];
+                }
+            }
             worker.resume();
             callback(gotten[url]);
         } else {
@@ -150,7 +154,12 @@ var amd_cf = (function () {
                     eq.loaded = true;
                     gotten[url] = eq;
                     retObj.equation = eq;
-                    obj_eq.eq = eq;
+                    //Assign by property so it is passed by reference
+                    for (prop in eq) {
+                        if (eq.hasOwnProperty(prop)) {
+                            retObj.equation[prop] = eq[prop];
+                        }
+                    }
                     worker.resume();
                     callback(eq);
                 }

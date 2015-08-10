@@ -265,7 +265,7 @@ var amd_ww = (function () {
                 finishFunction = callback;
                 post_callback();
             } else {
-                worker.postMessage(message);
+                worker.postMessage(JSON.parse(JSON.stringify(message)));
             }
         };
 
