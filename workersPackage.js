@@ -171,7 +171,7 @@ var amd_ww = (function () {
 
         sublib.resume = function () {
             superPause = false;
-            startJob();
+            nextJob();
         };
 
         //Local functions
