@@ -98,8 +98,8 @@ var amd_ww = (function () {
 
     createWorkerObj = function (start_obj) {
         //Declare local vars
-        var clearWorkers, finishFunction, jobsArray, sublib, setFinishFunction,
-            startJob, submitJob, post_callback, workersArr, onComplete;
+        var clearWorkers, finishFunction, jobsArray, sublib, setFinishFunction, paused,
+            startJob, submitJob, post_callback, workersArr, onComplete, nextJob;
 
         //Define local vars
         onComplete = function () {
@@ -108,6 +108,7 @@ var amd_ww = (function () {
         jobsArray = [];
         sublib = {};
         workersArr = [];
+        paused = false;
 
         //Global function declarations
         sublib.clearWorkers = function (callback) {
@@ -195,18 +196,21 @@ var amd_ww = (function () {
             if (typeof finishFunction === 'function') {
                 finishFunction();
                 finishFunction = undefined;
+                paused = false;
             }
         };
 
         setFinishFunction = function (callback) {
             //Check to make sure user input is good
             if (typeof callback !== 'function') {
-                throw 'Callback must be a function';
+                throw 'onComplete must be passed a function';
             }
             //set the function to the approriate definition, then make sure it isn't already 
                 //done
-            finishFunction = callback;
-            post_callback();
+            jobsArray.push(['&&&onComplete&&&', callback]);
+
+            //Check if there are workers available to submit jobs to
+            nextJob();
         };
 
         startJob = function (workerToStart) {
@@ -214,10 +218,16 @@ var amd_ww = (function () {
             var callback, job, message, worker;
 
             //Variable definitions
-            onComplete = setFinishFunction;
+
             worker = workersArr[workerToStart][0];
             workersArr[workerToStart][1] = true; //This is to make sure multiple jobs are not
                 //submitted
+
+            //Make sure we are not paused
+            if (paused) {
+                post_callback();
+                return;
+            }
 
             //make sure there are jobs to do
             if (jobsArray.length > 0) {
@@ -237,13 +247,16 @@ var amd_ww = (function () {
             };
 
             //Post the message to the worker
-            worker.postMessage(message);
+            if (typeof message === 'string' && message === '&&&onComplete&&&') {
+                paused = true;
+                finishFunction = callback;
+                post_callback();
+            } else {
+                worker.postMessage(message);
+            }
         };
 
         submitJob = function (message, callback) {
-            //Variable
-            var i;
-
             //variable definitions
             callback = callback !== undefined ?  callback : function () {
                 return;
@@ -251,12 +264,16 @@ var amd_ww = (function () {
 
             //Check user input
             if (typeof callback !== 'function') {
-                throw 'Callback must be a function';
+                throw 'submitJob callback must be a function';
             }
 
             //Add job to jobs array
             jobsArray.push([message, callback]);
+            nextJob();
+        };
 
+        nextJob = function () {
+            var i;
             //Check if there are workers available to submit jobs to
             for (i = 0; i < workersArr.length; i += 1) {
                 if (!workersArr[i][1]) {
@@ -265,6 +282,8 @@ var amd_ww = (function () {
                 }
             }
         };
+
+        onComplete = setFinishFunction;
 
         //Actually start the workers for this scope
         (function () {
