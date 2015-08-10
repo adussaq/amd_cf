@@ -6,13 +6,13 @@ The same example is shown below and is included as index.html in this directory.
 This package allows for curve fitting to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
 * workersPackage.js (amd_ww)
 * jquery-2.1.4.min.js (jQuery)
-* .json (An **equation_obj**, described below)
+* .jsonp (An **equation_obj**, described below)
 * fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, string, this is the address of .json __equation_obj__, more information below*] and a **ge_callback** function [*Not required, function, however equation is grabbed asynchronously so it is smart to use this callback.*]|
+|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, more information below*] and a **ge_callback** function [*Not required, function, however equation is grabbed asynchronously so it is smart to use this callback.*]|j
 |fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 
@@ -33,15 +33,35 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |bool|[*optional, 1D array of booleans*] Length equivalent to that of X and y, labels each (X,y) point as viable data, digested to a true/false boolean|
 
 ###equation_obj###
+This is a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp. This is required for every function type that is to be fit.
+
 |Property|Description|
 |---------------|----------------|
-|step|[*optional*] function to determine stepping for curve fitting parameters ... |
+|**func|[*function, required*] This function must be set up to take two parameters: an X matrix (array of arrays) and a parameter vector. It should use these inputs to calculate a 'y' value and return a single number.|
+|**setInitial|[*function, required*] This function must be set up to take the X matrix and the y array that will be used for the modeling, then utilize these components to determine the initial parameters for the fit.|
+|func_fit_params|[*object, optional*] This series of parameters  |
+
+**Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
 
 ###fit_params###
+This optional object will overwrite the default and the func_fit_params when possible.
+
 |Property|Description|
 |---------------|----------------|
-|maxItt|[*integer*] Maximum number of itterations before fitting is abandoned, default: 1000|
-|minPer|[*float*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
+|minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+
+###func_fit_params###
+This optional object is set in a non dynamic fashion as part of the jsonp equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
+
+|Property|Description|
+|---------------|----------------|
+|maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
+|minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
+
+**Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
+
 
 ##Example of how to utilize tool.##
     // Data set up
@@ -63,7 +83,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 
 
     /* This is done asynchronously, start by grabbing your function of interest */
-    amd_cf.getEquation('simpleCubic.json', function(eq) {
+    amd_cf.getEquation('simpleCubic.jsonp', function(eq) {
         //Now fit the data you have already set up
         //Fits the data asynchronously
         amd_cf.fitEquation(data1, function(res, cleanOriginData) {
@@ -85,7 +105,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
         
     });
 
-##simpleCubic.json##
+##simpleCubic.jsonp##
     {
         stringified: 'a * x ^ 3 + b',
         func: function (xVector, P) {
