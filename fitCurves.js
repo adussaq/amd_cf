@@ -132,7 +132,7 @@ var amd_cf = (function () {
         checkWW();
         //set out ajax call as needed for url
         if (gotten[url]) {
-            retObj.equation = gotten[url];
+            
             //Assign by property so it is passed by reference
             for (prop in gotten[url]) {
                 if (gotten[url].hasOwnProperty(prop)) {
@@ -152,7 +152,7 @@ var amd_cf = (function () {
                     eq.string = res.responseText;
                     eq.loaded = true;
                     gotten[url] = eq;
-                    retObj.equation = eq;
+                    
                     //Assign by property so it is passed by reference
                     for (prop in eq) {
                         if (eq.hasOwnProperty(prop)) {
