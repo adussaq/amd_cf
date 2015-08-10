@@ -97,7 +97,6 @@ var amd_cf = (function () {
             if (checkdata(data)) {
                 //Sanitizes data, this has to be done for web workers
                 data.equation = retObj.equation;
-                data = JSON.parse(JSON.stringify(data));
                 worker.submitJob(data, function (res) {
                     //This will return the results of the analysis and the original data
                     callback(res.data[1], res.data[0]);
