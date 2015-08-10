@@ -249,6 +249,7 @@ var amd_ww = (function () {
             //Post the message to the worker
             if (typeof message === 'string' && message === '&&&onComplete&&&') {
                 paused = true;
+                workersArr[workerToStart][1] = false;
                 finishFunction = callback;
                 post_callback();
             } else {
