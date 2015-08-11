@@ -81,7 +81,7 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 
 
 ##Minimal example of how to utilize tool.##
-For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/ 
+For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/ <br />
     // Data set up
     var data = {
         x_values: [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]],
