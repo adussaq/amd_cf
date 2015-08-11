@@ -78,6 +78,7 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 |R2|[*number*]|
 |WWtest|[*number*]|
 |totalSqrErrors|[*number*]|
+|success|[*number*] __Need to add this still...__ 0 if failure, otherwise this represents the itteration number at which the minimum solution was reached.|
 
 
 ##Minimal example of how to utilize tool.##
