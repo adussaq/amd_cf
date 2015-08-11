@@ -12,25 +12,32 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments, **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, more information below*] and a **ge_callback** function [*Not required, function, however equation is grabbed asynchronously so it is smart to use this callback.*]|j
+|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*Not required, function, described below*]. Returns: __fit_obj__ [*object*]|
+
+
+###**fit_obj**###
+|Property|Description|
+|---------------|----------------|
 |fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
+|equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp url, editing it will **NOT** effect any downstream fitting, this is functionally a read only object.|
+|url|[*string*] This is the url used to grab the .jsonp __equation_obj__|
 
 ###**Callback Functions**###
 |Function|Description|
 |---------------|----------------|
 |ge_callback|This function is passed **equation_obj** [*object*] asynchronously.|
-|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and the original **data_obj** cleaned of functions.|
+|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and the original **data_obj** cleaned of any functions that may have been added.|
 
 
 ###data_obj###
 |Property|Description|
 |---------------|----------------|
-|equation_obj|[*required, object*] This is the object passed into the callback function for **getEquation*** and is described further below.
 |x_values|[*required, 2D array of doubles*] X=[[x1],[x2],[x3]...[xn]], where y=f(X)*|
 |y_values|[*required, 1D array of doubles*] y, where y=f(X)|
 |fit_params|[*optional, object*] Described below, determines fitting conditions*]
 |bool|[*optional, 1D array of booleans*] Length equivalent to that of X and y, labels each (X,y) point as viable data, digested to a true/false boolean|
+|_other_|[*optional*] This may be any property you would like other than a function, it will be passed around with the data results.|
 
 ###equation_obj###
 This is a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp. This is required for every function type that is to be fit.
@@ -39,9 +46,11 @@ This is a complicated object, for a full example please see: https://github.com/
 |---------------|----------------|
 |**func|[*function, required*] This function must be set up to take two parameters: an X matrix (array of arrays) and a parameter vector. It should use these inputs to calculate a 'y' value and return a single number.|
 |**setInitial|[*function, required*] This function must be set up to take the X matrix and the y array that will be used for the modeling, then utilize these components to determine the initial parameters for the fit.|
-|func_fit_params|[*object, optional*] This series of parameters  |
+|**func_fit_params|[*object, optional*] This series of parameters describes the way all data passed into the fit function will be treated, more information below.|
+|**string|[*string, protected*] This element contains the entirety of the jsonp article as a string. Do not try to store information in a property of the same name, it will be overwritten|
+|**_other_|[*optional*] This may be any property you would like, it will be passed around with the data results.|
 
-**Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
+**Note: This cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
 
 ###fit_params###
 This optional object will overwrite the default and the func_fit_params when possible.
@@ -56,11 +65,11 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 
 |Property|Description|
 |---------------|----------------|
-|maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
-|minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|**maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
+|**minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
 |**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
-**Note: this cannot be set dynamically, doing so will just have them reset to the original form for the actual fitting process. This is due to the way functions are passed into web workers.
+**Note: this cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
 
 
 ##Example of how to utilize tool.##

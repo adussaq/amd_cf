@@ -3,13 +3,40 @@
 
 var amd_cf = (function () {
     'use strict';
-    var isArray, main, $, checkjQ, workerScript, checkdata, gotten, createRetObj;
+    var isArray, checkEquation, main, $, checkWW, checkjQ, workerScript, checkdata, gotten, worker, createRetObj;
 
     //Note: This indicates that this package and fitCurvesWorkers must be in the same
     // Directory, if they are not, this location needs to be changed...
     workerScript = 'fitCurvesWorker.js';
     main = {};
     gotten = {};
+
+
+    checkEquation = function (eq, url) {
+        if (!eq || typeof eq !== 'object') {
+            throw 'Equation object at ' + url + ' is not an object, see: https://github.com/adussaq/amd_cf/blob/gh-pages/README.md#equation_obj for more information.';
+        }
+        if (!eq.hasOwnProperty('func') || typeof eq.func !== 'function') {
+            throw 'Equation object at ' + url + ' does not have a proper ".func" property, see: https://github.com/adussaq/amd_cf/blob/gh-pages/README.md#equation_obj for more information.';
+        }
+        if (!eq.hasOwnProperty('setInitial') || typeof eq.setInitial !== 'function') {
+            throw 'Equation object at ' + url + ' does not have a proper ".setInitial" property, see: https://github.com/adussaq/amd_cf/blob/gh-pages/README.md#equation_obj for more information.';
+        }
+    };
+
+    checkWW = function () {
+        var ret;
+        if (window.amd_ww) {
+            worker = window.amd_ww.startWorkers({filename: workerScript});
+            checkWW = function () {
+                return true;
+            };
+            ret = true;
+        } else {
+            throw 'amd_ww is required for this curve fitting, download at: https://github.com/adussaq/amd_ww/';
+        }
+        return ret;
+    };
 
     isArray = (function () {
         // Use compiler's own isArray when available
@@ -33,8 +60,7 @@ var amd_cf = (function () {
             $ = window.jQuery;
             ret = true;
         } else {
-            console.error('jQuery is required for this add on package.');
-            ret = false;
+            throw 'jQuery is required for this add on package.';
         }
         return ret;
     };
@@ -68,6 +94,7 @@ var amd_cf = (function () {
 
     main.getEquation = function (url, callback) {
         var ret;
+        //Make sure jquery is loaded, this is for grabbing the equation, their AJAX is much more advanced than what I wish to write.
         if (checkjQ()) {
             if (!callback || typeof callback !== 'function') {
                 callback = function (eq) {
@@ -76,17 +103,27 @@ var amd_cf = (function () {
             }
             //Return an object with fit equations and done fitting equations attached.
             ret = createRetObj(url, callback);
-        } else {
-            ret = false;
         }
         return ret;
     };
 
     createRetObj = function (url, callback) {
-        var retObj, fitEquation, doneFitting, worker, checkWW, prop;
+        //Variable Declarations
+        var retObj, fitEquation, doneFitting, equation, evaleq, assignToEq;
 
+        //Variable Definitions
         retObj = {};
-        retObj.equation = {}; // This is to pass things by reference
+        equation = {}; // This is to pass things by reference
+
+        //Function Definitions
+        assignToEq = function (obj) {
+            var myprop;
+            for (myprop in obj) {
+                if (obj.hasOwnProperty(myprop)) {
+                    equation[myprop] = obj[myprop];
+                }
+            }
+        };
 
         fitEquation = function (data, callback) {
             if (checkdata(data)) {
@@ -99,21 +136,6 @@ var amd_cf = (function () {
             }
         };
 
-        checkWW = function () {
-            var ret;
-            if (window.amd_ww) {
-                worker = window.amd_ww.startWorkers({filename: workerScript});
-                worker.pause();
-                checkWW = function () {
-                    return true;
-                };
-                ret = true;
-            } else {
-                throw 'amd_ww is required for this curve fitting, download at: https://github.com/adussaq/amd_ww/';
-            }
-            return ret;
-        };
-
         doneFitting = function (callback) {
             if (!callback || typeof callback !== 'function') {
                 console.error('Callback function should be defined and utilized, this is done asynchronously.');
@@ -124,45 +146,55 @@ var amd_cf = (function () {
             worker.onComplete(callback);
         };
 
-        checkWW();
-        //set out ajax call as needed for url
-        if (gotten[url]) {
-            //Assign by property so it is passed by reference
-            for (prop in gotten[url]) {
-                if (gotten[url].hasOwnProperty(prop)) {
-                    retObj.equation[prop] = gotten[url][prop];
-                }
-            }
-            worker.resume();
-            callback(gotten[url]);
-        } else {
-            $.ajax({
-                dataType: "json",
-                url: url,
-                complete: function (res) {
-                    var eq;
-                    eq = {};
-                    eval('eq = ' + res.responseText);
-                    eq.string = res.responseText;
-                    eq.loaded = true;
-                    gotten[url] = eq;
+        evaleq = function (str) {
+            var eq = {};
+            eval('eq = ' + str);
+            eq.string = str;
+            return eq;
+        };
 
-                    //Assign by property so it is passed by reference
-                    for (prop in eq) {
-                        if (eq.hasOwnProperty(prop)) {
-                            retObj.equation[prop] = eq[prop];
-                        }
+        //Do the actual work of the function.
+        (function () {
+            //Check if workers have started, pause them.
+            checkWW();
+            worker.pause();
+
+            //Grab the result, if the url has already been resolved
+            if (gotten[url]) {
+                //Assign by property so it is passed by reference
+                assignToEq(gotten[url][0]);
+                worker.resume(); // unpause the worker queue
+                retObj.equation = gotten[url][1];
+                callback(gotten[url][1]);
+
+            //If it has not been, then send the ajax command
+            } else {
+                $.ajax({
+                    dataType: "json",
+                    url: url,
+                    complete: function (res) {
+                        var eq1, eq2;
+                        //I have two so the local equation cannot be changed by editing the returned one.
+                        eq1 = evaleq(res.responseText);
+                        eq2 = evaleq(res.responseText);
+                        checkEquation(eq1, url); //This will throw an error as needed
+                        gotten[url] = [eq1, eq2];
+
+                        //Assign by property so it is passed by reference
+                        assignToEq(eq1);
+                        worker.resume(); // unpause the worker queue
+
+                        //These are the same, however editing them will not effect eq1
+                        retObj.equation = eq2;
+                        callback(eq2);
                     }
-                    worker.resume();
-                    callback(eq);
-                }
-            });
-        }
+                });
+            }
 
-        retObj.fitEquation = fitEquation;
-        retObj.doneFitting = doneFitting;
-        retObj.url = url;
-
+            retObj.fitEquation = fitEquation;
+            retObj.doneFitting = doneFitting;
+            retObj.url = url;
+        }());
 
         return retObj;
     };
