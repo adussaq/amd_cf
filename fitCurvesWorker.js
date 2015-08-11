@@ -247,7 +247,7 @@
         runCond = determineRunningConditions(event.data);
         result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y, runCond.fit_params);
         //return result
-        self.postMessage([event.data, result]);
+        self.postMessage([runCond.fit_params, result]);
     };
 
 }());
