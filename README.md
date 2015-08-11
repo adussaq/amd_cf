@@ -35,7 +35,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |---------------|----------------|
 |x_values|[*required, 2D array of doubles*] X=[[x1],[x2],[x3]...[xn]], where y=f(X)*|
 |y_values|[*required, 1D array of doubles*] y, where y=f(X)|
-|fit_params|[*optional, object*] Described below, determines fitting conditions*]
+|fit_params|[*optional, object*] Described below, determines fitting conditions.|
 |bool|[*optional, 1D array of booleans*] Length equivalent to that of X and y, labels each (X,y) point as viable data, digested to a true/false boolean|
 |_other_|[*optional*] This may be any property you would like other than a function, it will be passed around with the data results.|
 
