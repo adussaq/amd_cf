@@ -107,7 +107,7 @@
 
     determineRunningConditions = function (object) {
         //variable declarations
-        var options, options2, i, X, xIni, yIni, length, equationObj, hasBool, p;
+        var options, options2, i, X, xIni, yIni, length, equationObj, hasBool, p, initParams;
         equationObj = eval('equationObj=' + object.equation.string);
         //variable defintions
         X = object.x_values;
@@ -143,6 +143,17 @@
         for (p in options2) {
             if (options2.hasOwnProperty(p)) {
                 options[p] = options2[p];
+            }
+        }
+
+        //Determine start conditions
+        initParams = equationObj.setInitial(xIni, yIni);
+        //Run step function if it exits
+        if (options.hasOwnProperty('step')) {
+            if (typeof options.step === 'function') {
+                options.step = options.step(initParams);
+            } else {
+                delete options.step; // If it is not a function, then it needs to be returned to normal
             }
         }
 
@@ -247,7 +258,7 @@
         runCond = determineRunningConditions(event.data);
         result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y, runCond.fit_params);
         //return result
-        self.postMessage([runCond.fit_params, result]);
+        self.postMessage([event.data, result]);
     };
 
 }());
