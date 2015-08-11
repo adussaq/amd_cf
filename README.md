@@ -102,10 +102,8 @@ For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/
             return P[0] * Math.pow(xVector[0],3) + P[1];
         },
         setInitial: function (x_mat, y_vec) {
-            // For other data, this must be made more intelligent
             var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
             var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
-
             return [A, B];
         }
     }
