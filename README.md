@@ -12,13 +12,13 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*Not required, function, described below*]. Returns: __fit_obj__ [*object*]|
+|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*Not required, function, described below*]. Returns: __fitting_obj__ [*object*]|
 
 
-###**fit_obj**###
+###**fitting_obj**###
 |Property|Description|
 |---------------|----------------|
-|fitEquation|[*function*] This function takes two arguments, **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]|
+|fitEquation|[*function*] This function takes two arguments. Input: **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]. Return: via a **fit_res** to **fe_callback**[*object, described below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 |equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp url, editing it will **NOT** effect any downstream fitting, this is functionally a read only object.|
 |url|[*string*] This is the url used to grab the .jsonp __equation_obj__|
@@ -27,7 +27,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |Function|Description|
 |---------------|----------------|
 |ge_callback|This function is passed **equation_obj** [*object*] asynchronously.|
-|fe_callback|This function is called once the fitting is completed, it is passed two objects: **cf_res** [*described below*] and the original **data_obj** cleaned of any functions that may have been added.|
+|fe_callback|This function is called once the fitting is completed, it is passed two objects: **fit_res** [*described below*] and the original **data_obj** cleaned of any functions that may have been added.|
 
 
 ###data_obj###
@@ -57,61 +57,49 @@ This optional object will overwrite the default and the func_fit_params when pos
 
 |Property|Description|
 |---------------|----------------|
-|maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
-|minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|maxItt|[*number, optional*] Maximum number of itterations before fitting is abandoned, must be an integer > 0 default: 1000|
+|minPer|[*number, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
 
 ###func_fit_params###
 This optional object is set in a non dynamic fashion as part of the jsonp equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
 
 |Property|Description|
 |---------------|----------------|
-|**maxItt|[*integer, optional*] Maximum number of itterations before fitting is abandoned, default: 1000|
-|**minPer|[*float, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|**maxItt|[*number, optional*] Maximum number of itterations before fitting is abandoned, must be an integer > 0 default: 1000|
+|**minPer|[*number, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
 |**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
 **Note: this cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
 
+###fit_res###
+|Property|Description|
+|---------------|----------------|
+|parameters|[*array*]|
+|R2|[*number*]|
+|WWtest|[*number*]|
+|totalSqrErrors|[*number*]|
 
-##Example of how to utilize tool.##
+
+##Minimal example of how to utilize tool.##
+For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/ 
     // Data set up
     var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
-    var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
-    var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
-
-    var data1 = {
+    var y = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
+    var data = {
         x_values: X,
         y_values: y1,
-        equation: eq,
     };
 
-    var data2 = {
-        x_values: X,
-        y_values: y2,
-        equation: eq,
-    };
-
+    //Get equation object (defined below)
     var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 
     //Fits the data asynchronously
-    eq_obj.fitEquation(data1, function(res, cleanOriginData) {
-        //cleanOriginData is the data with all functions removed
-        console.log('Done With 1', res);
-    });
-
-    //Fits the data asynchronously
-    eq_obj.fitEquation(data2, function(res, cleanOriginData) {
-        //cleanOriginData is the data with all functions removed
-        console.log('Done With 2', res);
-    });
-
-    // If a lot of fits are called, this will be called once all fitting is completed
-    eq_obj.doneFitting(function() {
-        console.log('Done With All!');
+    eq_obj.fitEquation(data, function(res) {
+        console.log('Done with data fit:', res);
     });
 
 ##simpleCubic.jsonp##
     {
-        stringified: 'a * x ^ 3 + b',
         func: function (xVector, P) {
             return P[0] * Math.pow(xVector[0],3) + P[1];
         },
@@ -121,8 +109,7 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
             var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
             return [A, B];
-        },
-        description: 'For fitting two parameter Ax^3+B cubic function'
+        }
     }
 
 These modules were combined with the following visualization libraries: google chart tools (https://developers.google.com/chart/), jqmath (http://mathscribe.com/author/jqmath.html), and bootstrap (http://getbootstrap.com/) to create a tool to visualize individual curve fits for a unique biological data set. This is avaliable at http://kinome.github.io/demo-cf/#model.

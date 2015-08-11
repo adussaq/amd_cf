@@ -128,7 +128,7 @@ var amd_cf = (function () {
         fitEquation = function (data, callback) {
             if (checkdata(data)) {
                 //Sanitizes data, this has to be done for web workers
-                data.equation = retObj.equation;
+                data.equation = equation;
                 worker.submitJob(data, function (res) {
                     //This will return the results of the analysis and the original data
                     callback(res.data[1], res.data[0]);
@@ -163,9 +163,9 @@ var amd_cf = (function () {
             if (gotten[url]) {
                 //Assign by property so it is passed by reference
                 assignToEq(gotten[url][0]);
-                worker.resume(); // unpause the worker queue
                 retObj.equation = gotten[url][1];
                 callback(gotten[url][1]);
+                worker.resume(); // unpause the worker queue
 
             //If it has not been, then send the ajax command
             } else {
@@ -182,11 +182,11 @@ var amd_cf = (function () {
 
                         //Assign by property so it is passed by reference
                         assignToEq(eq1);
-                        worker.resume(); // unpause the worker queue
 
                         //These are the same, however editing them will not effect eq1
                         retObj.equation = eq2;
                         callback(eq2);
+                        worker.resume(); // unpause the worker queue
                     }
                 });
             }
