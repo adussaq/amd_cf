@@ -69,7 +69,7 @@
             if (itt === options.maxItt && Math.abs(1 - SSETot / lastItter) > options.minPer) {
                 success = 0;
             }
-            return {success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
+            return {initParams: {mI: options.maxItt, mpC: options.minPer, pC: Math.abs(1 - SSETot / lastItter) }, success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
         };
 
         sqrSumOfErrors = function (fun, X, y, x0) {
@@ -153,7 +153,7 @@
             if (typeof options.step === 'function') {
                 options.step = options.step(initParams);
             } else {
-                delete options.step; // If it is not a function, then it needs to be returned to normal
+                delete options.step; // If it is not a function, then it needs to be returned to no value
             }
         }
 
