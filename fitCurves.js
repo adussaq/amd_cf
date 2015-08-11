@@ -127,11 +127,14 @@ var amd_cf = (function () {
 
         fitEquation = function (data, callback) {
             if (checkdata(data)) {
-                //Sanitizes data, this has to be done for web workers
                 data.equation = equation;
                 worker.submitJob(data, function (res) {
+                    var originData;
                     //This will return the results of the analysis and the original data
-                    callback(res.data[1], res.data[0]);
+                    originData = res.data[0];
+                    delete originData.equation; //return origin data to its original state
+
+                    callback(res.data[1], originData);
                 });
             }
         };
@@ -164,8 +167,8 @@ var amd_cf = (function () {
                 //Assign by property so it is passed by reference
                 assignToEq(gotten[url][0]);
                 retObj.equation = gotten[url][1];
-                callback(gotten[url][1]);
                 worker.resume(); // unpause the worker queue
+                callback(gotten[url][1]);
 
             //If it has not been, then send the ajax command
             } else {
@@ -185,8 +188,8 @@ var amd_cf = (function () {
 
                         //These are the same, however editing them will not effect eq1
                         retObj.equation = eq2;
-                        callback(eq2);
                         worker.resume(); // unpause the worker queue
+                        callback(eq2);
                     }
                 });
             }

@@ -20,16 +20,15 @@
         //variable defintions
 
         //function definitions
-        func = function (fun, x0, X, y) {
+        func = function (fun, x0, X, y, options) {
             //variable definitions
-            var corrIsh, itt, lastItter, options, parI, SSDTot, sse, SSETot, x1;
+            var corrIsh, itt, lastItter, parI, SSDTot, sse, SSETot, x1, success;
 
             //variable declarations
-            options = {
-                step: x0.map(function (s) {return s / 100; }),
-                maxItt: 1000,
-                minPer: 1e-6
-            };
+            options = typeof options === 'object' ? options : {};
+            options.step = options.step || x0.map(function (s) {return s / 100; });
+            options.maxItt = options.maxItt || 1000;
+            options.minPer = options.minPer || 1e-6;
             lastItter = Infinity;
             x1 = JSON.parse(JSON.stringify(x0));
 
@@ -64,7 +63,13 @@
             SSDTot = sqrSumOfDeviations(y);
             SSETot = sqrSumOfErrors(fun, X, y, x0);
             corrIsh = 1 - SSETot / SSDTot;
-            return {parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
+
+            //Check if fitting converged
+            success = itt;
+            if (itt === options.maxItt && Math.abs(1 - sse / lastItter) > options.minPer) {
+                success = 0;
+            }
+            return {success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
         };
 
         sqrSumOfErrors = function (fun, X, y, x0) {
@@ -102,23 +107,46 @@
 
     determineRunningConditions = function (object) {
         //variable declarations
-        var i, X, xIni, yIni, length, equationObj;
+        var options, options2, i, X, xIni, yIni, length, equationObj, hasBool, p;
         equationObj = eval('equationObj=' + object.equation.string);
         //variable defintions
         X = object.x_values;
         xIni = [];
         yIni = [];
         length = X.length;
+        hasBool = true;
+
+        //check if bool exits
+        if (!object.hasOwnProperty('bool')) {
+            hasBool = false;
+            object.bool = [];
+        }
 
         //determine what points are 'good'
         for (i = 0; i < length; i += 1) {
-            //if (object.accurateData[i]) { // This exists if 'accurate data' is being determined
-            if (length) {
-                xIni.push([X[i]]); // This is to be used for the curve fitting
+            if (hasBool) {
+                if (object.bool[i]) { // This exists if 'accurate data' is being determined
+                    xIni.push([X[i]]); // This is to be used for the curve fitting
+                    yIni.push(object.y_values[i]);
+                }
+            } else {
+                object.bool.push(1);
+                xIni.push([X[i]]);
                 yIni.push(object.y_values[i]);
             }
+
         }
-        return {params: equationObj.setInitial(xIni, yIni), X: xIni, y: yIni, func: equationObj.func};
+
+        //Check for fitting parameters
+        options = equationObj.func_fit_params || {};
+        options2 = equationObj.fit_params || {};
+        for (p in options2) {
+            if (options2.hasOwnProperty(p)) {
+                options[p] = options2[p];
+            }
+        }
+
+        return {fit_params: options, params: equationObj.setInitial(xIni, yIni), X: xIni, y: yIni, func: equationObj.func};
     };
 
     runsTest = (function () {
@@ -212,12 +240,12 @@
         return main;
     }());
 
-self.onmessage = function (event) {
+    self.onmessage = function (event) {
         //variable declarations
         var result, runCond;
         //variable definitions
         runCond = determineRunningConditions(event.data);
-        result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y);
+        result = fmincon(runCond.func, runCond.params, runCond.X, runCond.y, runCond.fit_params);
         //return result
         self.postMessage([event.data, result]);
     };

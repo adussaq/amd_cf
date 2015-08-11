@@ -1,5 +1,5 @@
 {
-    "stringified": "a * x ^ 3 + b",
+    /*Below are the two requried parameters*/
     "func": function (xVector, P) {
         return P[0] * Math.pow(xVector[0],3) + P[1];
     },
@@ -10,5 +10,22 @@
 
         return [A, B];
     },
-    "description":  "For fitting two parameter Ax^3+B cubic function"
+    
+    /*Below is a functional optional parameter*/
+    "func_fit_params": {
+        "maxItt": 1010, /*Default: 1000*/
+        "minPer": 0.9e-6, /*Default: 1e-6*/
+        "step": function (initParameters) {
+            var ret = [];
+            for (var i = 0; i < initParameters.length; i += 1) {
+                ret[i] = initParameters[i]/105; /*Default: x/100*/
+            }
+            return ret;
+        }
+    },
+
+    /*Below are completely optional, non functional parameters*/
+    "description":  "For fitting two parameter Ax^3+B cubic function",
+    "stringified": "a * x ^ 3 + b",
+    "string": "this will be overwritten, do not include anything by this name"
 }
