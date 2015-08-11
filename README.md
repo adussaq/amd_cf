@@ -83,11 +83,9 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 ##Minimal example of how to utilize tool.##
 For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/ 
     // Data set up
-    var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
-    var y = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
     var data = {
-        x_values: X,
-        y_values: y1,
+        x_values: [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]],
+        y_values: [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19],
     };
 
     //Get equation object (defined below)
