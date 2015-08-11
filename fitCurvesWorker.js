@@ -66,7 +66,7 @@
 
             //Check if fitting converged
             success = itt;
-            if (itt === options.maxItt && Math.abs(1 - sse / lastItter) > options.minPer) {
+            if (itt === options.maxItt && Math.abs(1 - SSETot / lastItter) > options.minPer) {
                 success = 0;
             }
             return {success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};

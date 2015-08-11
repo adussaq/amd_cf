@@ -8,7 +8,7 @@
         var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
         var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
-        return [A, B];
+        return [A/2, B/2];
     },
     
     /*Below is a functional optional parameter*/
