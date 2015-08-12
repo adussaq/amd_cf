@@ -1,5 +1,5 @@
 /*global console, window, Worker, amd_ww */
-
+var globww;
 //Passed JS-Lint - Alex Dussaq 2/20/2015
 var amd_ww = (function () {
     'use strict';
@@ -106,6 +106,7 @@ var amd_ww = (function () {
             return;
         };
         jobsArray = [];
+        globww = jobsArray;
         sublib = {};
         workersArr = [];
         paused = false;
@@ -177,7 +178,7 @@ var amd_ww = (function () {
             var callback = function () {
                 superPause = false;
             };
-            jobsArray.push(['&&&onComplete&&&', callback]);
+            jobsArray.push(['&&&resume&&&', callback]);
             nextJob();
         };
 
@@ -216,6 +217,15 @@ var amd_ww = (function () {
                 paused = false;
                 nextJob();
             }
+            if (superPause) {
+                for (i = 0; i < jobsArray.length; i += 1) {
+                    if (jobsArray[i][0] === '&&&resume&&&') {
+                        paused = true;
+                        finishFunction = jobsArray[i][1];
+                        post_callback();
+                    }
+                }
+            }
         };
 
         setFinishFunction = function (callback) {
@@ -243,7 +253,7 @@ var amd_ww = (function () {
 
             //Make sure we are not paused
             if (paused  || superPause) {
-                if (typeof message !== "string" && message !== '&&&onComplete&&&') {
+                if (typeof message !== "string" && (message !== '&&&onComplete&&&' || message !== '&&&resume&&&')) {
                     finishFunction = callback;
                 }
                 workersArr[workerToStart][1] = false;
@@ -269,7 +279,7 @@ var amd_ww = (function () {
             };
 
             //Post the message to the worker
-            if (typeof message === "string" && message === '&&&onComplete&&&') {
+            if (typeof message === "string" && (message === '&&&onComplete&&&' || message === '&&&resume&&&')) {
                 paused = true;
                 workersArr[workerToStart][1] = false;
                 finishFunction = callback;
