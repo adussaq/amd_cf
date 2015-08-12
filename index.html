@@ -21,14 +21,14 @@
 	</head>
 	<body>
 		<h2>Open the console to test curve fitting with web workers!</h2>
-		<b>The following is the set up, this has already been done for you!</b><br />
+		<b>The following is the set up, this has already been done for you!</b>
 		<pre><code>
 /* This has already been defined */
 var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
 var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
 var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
 
-<b>The following is the contents of simpleCubic.json</b><br />
+<b>The following is the contents of simpleCubic.json</b>
 <pre><code>
 {
 	stringified: 'a * x ^ 3 + b',
@@ -45,7 +45,7 @@ var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2
 	description: 'For fitting two parameter Ax^3+B cubic function'
 } 
 </code></pre>
-<b>Copy and paste this into your console to run this functions.</b><br />
+<b>Copy and paste this into your console to run this functions.</b>
 <pre><code>
 /* This is done asynchronously, start by grabbing your function of interest */
 
@@ -60,8 +60,8 @@ var data1 = {
 var data2 = {
 	x_values: X,
 	y_values: y2,
-	fit_params: { // These will overwrite the func_fit_params found in the .jsonp file
-		step: 3,
+	fit_params: { // These are optional and will overwrite the func_fit_params found in the .jsonp file
+		checkItt: 3,
 		maxItt: 100
 	}
 };
