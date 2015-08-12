@@ -7,16 +7,6 @@
 			var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
 			var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
 			var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
-
-			var eqStr = "{stringified:'a * x ^ 3 + b',func:function(xVector,P){return P[0]*Math.pow(xVector[0],3)+P[1];},setInitial:function(x_mat,y_vec){var A=(y_vec[1]-y_vec[0])/(Math.pow(x_mat[1][0],3)-Math.pow(x_mat[0][0],3));var B=y_vec[0]-A*Math.pow(x_mat[0][0],3);return [A,B];},description:'For fitting two parameter Ax^3+B cubic function'}";
-
-			var worker = amd_ww.startWorkers({filename:'fitCurvesWorker.js'});
-
-			var data = {
-				x_values: X,
-				y_values: y1,
-				equation: eqStr,
-			}
 		</script>
 	</head>
 	<body>
