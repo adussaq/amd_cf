@@ -23,62 +23,62 @@
 		<h2>Open the console to test curve fitting with web workers!</h2>
 		<b>The following is the set up, this has already been done for you!</b>
 		<pre style="margin-top: -10px;"><code>
-/* This has already been defined */
-var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
-var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
-var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
+	/* This has already been defined */
+	var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
+	var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
+	var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
 </code></pre>
-<b>The following is the minimum contents of simpleCubic.json</b> Actual parameters set (all possible) can be seen at: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp">https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp</a>
+<b>The following is the minimum contents of simpleCubic.json</b> <br />Actual parameters set (all possible) can be seen at: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp">https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp</a>
 <pre style="margin-top: -10px;"><code>
-{
-	func: function (xVector, P) {
-		return P[0] * Math.pow(xVector[0],3) + P[1];
-	},
-	setInitial: function (x_mat, y_vec) {
-		// For other data, this must be made more intelligent
-		var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
-		var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
+	{
+		func: function (xVector, P) {
+			return P[0] * Math.pow(xVector[0],3) + P[1];
+		},
+		setInitial: function (x_mat, y_vec) {
+			// For other data, this must be made more intelligent
+			var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
+			var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
-        return [A, B];
-	}
-} 
+	        return [A, B];
+		}
+	} 
 </code></pre>
 <b>Copy and paste this into your console to run this functions.</b>
 <pre style="margin-top: -10px;"><code>
-//Grab you equation object
-var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
+	//Grab you equation object
+	var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 
-/* Set up your data */
-var data1 = {
-	x_values: X,
-	y_values: y1
-};
+	/* Set up your data */
+	var data1 = {
+		x_values: X,
+		y_values: y1
+	};
 
-var data2 = {
-	x_values: X,
-	y_values: y2,
-	fit_params: { // These are optional and will overwrite the func_fit_params found in the .jsonp file
-		checkItt: 3,
-		maxItt: 100
-	}
-};
+	var data2 = {
+		x_values: X,
+		y_values: y2,
+		fit_params: { // These are optional and will overwrite the func_fit_params found in the .jsonp file
+			checkItt: 3,
+			maxItt: 100
+		}
+	};
 
-//Fits the data asynchronously
-eq_obj.fitEquation(data1, function(res, cleanOriginData) {
-	//cleanOriginData is the data with all functions removed
-	console.log('Done With 1', res);
-});
+	//Fits the data asynchronously
+	eq_obj.fitEquation(data1, function(res, cleanOriginData) {
+		//cleanOriginData is the data with all functions removed
+		console.log('Done With 1', res);
+	});
 
-//Fits the data asynchronously
-eq_obj.fitEquation(data2, function(res, cleanOriginData) {
-	//cleanOriginData is the data with all functions removed
-	console.log('Done With 2', res);
-});
+	//Fits the data asynchronously
+	eq_obj.fitEquation(data2, function(res, cleanOriginData) {
+		//cleanOriginData is the data with all functions removed
+		console.log('Done With 2', res);
+	});
 
-// If a lot of fits are called, this will be called once all fitting is completed
-eq_obj.doneFitting(function() {
-	console.log('Done With All!');
-});
+	// If a lot of fits are called, this will be called once all fitting is completed
+	eq_obj.doneFitting(function() {
+		console.log('Done With All!');
+	});
 		</code></pre>
 	</body>
 </html>
