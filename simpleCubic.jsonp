@@ -4,17 +4,21 @@
         return P[0] * Math.pow(xVector[0],3) + P[1];
     },
     "setInitial": function (x_mat, y_vec) {
-        /* For other data, this must be made more intelligent*/
+        /* For other data, this must be made more intelligent */
         var A = ( y_vec[1] - y_vec[0] ) / (Math.pow(x_mat[1][0], 3) - Math.pow(x_mat[0][0], 3));
         var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
         return [A/2, B/2];
     },
     
-    /*Below is a functional optional parameter*/
+    /*Below is a functional optional parameter, 
+        any number of the internal parameters may be left off*/
     "func_fit_params": {
-        "maxItt": 1010, /*Default: 1000*/
-        "minPer": 0.9e-6, /*Default: 1e-6*/
+        "maxItt": 1010,     /*Default: 1000*/
+        "minPer": 0.9e-6,   /*Default: 1e-6*/
+        "checkItt": 4,      /*Default: 3*/
+        "converge": 1.21,   /*Default: 1.2*/
+        "diverge": -0.51,   /*Default: -0.5*/
         "step": function (initParameters) {
             var ret = [];
             for (var i = 0; i < initParameters.length; i += 1) {

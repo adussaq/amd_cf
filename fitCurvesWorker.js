@@ -29,6 +29,11 @@
             options.step = options.step || x0.map(function (s) {return s / 100; });
             options.maxItt = options.maxItt || 1000;
             options.minPer = options.minPer || 1e-6;
+            options.checkItt = Math.floor(options.checkItt) || 3;
+            options.converge = options.converge || 1.2;
+            options.diverge = options.diverge || -0.5;
+
+
             lastItter = Infinity;
             x1 = JSON.parse(JSON.stringify(x0));
 
@@ -41,16 +46,16 @@
                         x1[parI] += options.step[parI];
                         if (sqrSumOfErrors(fun, X, y, x1) < sqrSumOfErrors(fun, X, y, x0)) {
                             x0[parI] = x1[parI];
-                            options.step[parI] *= 1.2;
+                            options.step[parI] *= options.converge;
                         } else {
                             x1[parI] = x0[parI];
-                            options.step[parI] *= -0.5;
+                            options.step[parI] *= options.diverge;
                         }
                     }
                 }
 
                 //make it so it checks every 3 rotations for end case
-                if ((itt % 3) === 0) {
+                if ((itt % options.checkItt) === 0) {
                     sse = sqrSumOfErrors(fun, X, y, x0);
                     if (Math.abs(1 - sse / lastItter) < options.minPer) {
                         break;
@@ -69,7 +74,7 @@
             if (itt === options.maxItt && Math.abs(1 - SSETot / lastItter) > options.minPer) {
                 success = 0;
             }
-            return {v: 1, initParams: {mI: options.maxItt, mpC: options.minPer, pC: Math.abs(1 - SSETot / lastItter) }, success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
+            return {ops: JSON.parse(JSON.stringify(options)), success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
         };
 
         sqrSumOfErrors = function (fun, X, y, x0) {

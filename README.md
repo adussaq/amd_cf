@@ -20,7 +20,7 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 |---------------|----------------|
 |fitEquation|[*function*] This function takes two arguments. Input: **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]. Return: via a **fit_res** to **fe_callback**[*object, described below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
-|equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp url, editing it will **NOT** effect any downstream fitting, this is functionally a read only object.|
+|equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp file. NOTE: This is returned asyncronously, do not count on it to be there, also editing any component of it will **NOT** affect any downstream fitting, this is essentially a read only object.|
 |url|[*string*] This is the url used to grab the .jsonp __equation_obj__|
 
 ###**Callback Functions**###
@@ -59,14 +59,16 @@ This optional object will overwrite the default and the func_fit_params when pos
 |---------------|----------------|
 |maxItt|[*number, optional*] Maximum number of itterations before fitting is abandoned, must be an integer > 0 default: 1000|
 |minPer|[*number, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|checkItt|[*number, optional*] Cycle for which the minPer is checked, default: 3. [*Ex: For the default every 3rd cycle the change in sum of square errors is compared to the sum of square errors calculated 3 cycles ago, if this is less than minPer the fitting is completed.*]|
+|converge|[*number, optional*] This is the slope with which the steps change when the steps are moving the model in the correct direction. Default: 1.2|
+|diverge|[*number, optional*] This is the slope with which the steps change when the steps are moving the model in the incorrect direction. Default: -0.5|
 
 ###func_fit_params###
 This optional object is set in a non dynamic fashion as part of the jsonp equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
 
 |Property|Description|
 |---------------|----------------|
-|**maxItt|[*number, optional*] Maximum number of itterations before fitting is abandoned, must be an integer > 0 default: 1000|
-|**minPer|[*number, optional*] minimum percent change in sum of square deviations before fitting is considered complete, default: 1e-6|
+|**_general_|[*N/A, optional*] All parameters of fit_params can be assigned here, these can not be dynamically changed and will be overwritten by fit_params if utilized in the same fit.|
 |**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
 **Note: this cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
@@ -74,11 +76,11 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 ###fit_res###
 |Property|Description|
 |---------------|----------------|
-|parameters|[*array*]|
-|R2|[*number*]|
-|WWtest|[*number*]|
-|totalSqrErrors|[*number*]|
-|success|[*number*] __Need to add this still...__ 0 if failure, otherwise this represents the itteration number at which the minimum solution was reached.|
+|parameters|[*array*] The solution for the fit.|
+|R2|[*number*] R squared calculation for fit.|
+|WWtest|[*number*] Wald–Wolfowitz runs test, describes the non-parametric randomness of the residuals. For more information: https://en.wikipedia.org/wiki/Wald%E2%80%93Wolfowitz_runs_test.|
+|totalSqrErrors|[*number*] The sum of the square of errors for the fit.|
+|success|[*number*] 0 if failure, otherwise this represents the itteration number at which the minimum solution was reached, note that all values are divisible by __*checkItter*__ from __fit_params__ or __func_fit_params__ (default: 3).|
 
 
 ##Minimal example of how to utilize tool.##
