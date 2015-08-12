@@ -242,7 +242,10 @@ var amd_ww = (function () {
                 //submitted
 
             //Make sure we are not paused
-            if (paused || superPause) {
+            if (paused  || superPause) {
+                if (typeof message !== "string" && message !== '&&&onComplete&&&') {
+                    finishFunction = callback;
+                }
                 workersArr[workerToStart][1] = false;
                 post_callback();
                 return;
