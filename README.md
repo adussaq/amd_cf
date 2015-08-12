@@ -12,13 +12,13 @@ This package allows for curve fitting to be done within JavaScript Web Workers (
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*Not required, function, described below*]. Returns: __fitting_obj__ [*object*]|
+|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*optional, function, described below*]. Returns: __fitting_obj__ [*object*]|
 
 
 ###**fitting_obj**###
 |Property|Description|
 |---------------|----------------|
-|fitEquation|[*function*] This function takes two arguments. Input: **data_obj** [*required, object, more information below*] and a **fe_callback** [*Not required, function, more information below*]. Return: via a **fit_res** to **fe_callback**[*object, described below*]|
+|fitEquation|[*function*] This function takes two arguments. Input: **data_obj** [*required, object, more information below*] and a **fe_callback** [*optional, function, more information below*]. Return: via a **fit_res** to **fe_callback**[*object, described below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
 |equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp file. NOTE: This is returned asyncronously, do not count on it to be there, also editing any component of it will **NOT** affect any downstream fitting, this is essentially a read only object.|
 |url|[*string*] This is the url used to grab the .jsonp __equation_obj__|
