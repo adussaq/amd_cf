@@ -54,12 +54,16 @@ var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 /* Set up your data */
 var data1 = {
 	x_values: X,
-	y_values: y1,
+	y_values: y1
 };
 
 var data2 = {
 	x_values: X,
 	y_values: y2,
+	fit_params: { // These will overwrite the func_fit_params found in the .jsonp file
+		step: 3,
+		maxItt: 100
+	}
 };
 
 //Fits the data asynchronously

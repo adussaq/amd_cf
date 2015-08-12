@@ -68,7 +68,7 @@ This optional object is set in a non dynamic fashion as part of the jsonp equati
 
 |Property|Description|
 |---------------|----------------|
-|**_general_|[*N/A, optional*] All parameters of fit_params can be assigned here, these can not be dynamically changed and will be overwritten by fit_params if utilized in the same fit.|
+|**_general_|[*N/A, optional*] All parameters of __fit_params__ can be assigned here, these can not be dynamically changed and will be overwritten by __fit_params__ if utilized in the same fit.|
 |**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
 **Note: this cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
