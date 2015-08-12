@@ -28,10 +28,9 @@ var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
 var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
 var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
 </code></pre>
-<b>The following is the contents of simpleCubic.json</b>
+<b>The following is the minimum contents of simpleCubic.json</b> Actual parameters set (all possible) can be seen at: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp">https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp</a>
 <pre style="margin-top: -10px;"><code>
 {
-	stringified: 'a * x ^ 3 + b',
 	func: function (xVector, P) {
 		return P[0] * Math.pow(xVector[0],3) + P[1];
 	},
@@ -41,14 +40,12 @@ var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2
 		var B = y_vec[0] - A * Math.pow(x_mat[0][0], 3);
 
         return [A, B];
-	},
-	description: 'For fitting two parameter Ax^3+B cubic function'
+	}
 } 
 </code></pre>
 <b>Copy and paste this into your console to run this functions.</b>
 <pre style="margin-top: -10px;"><code>
-/* This is done asynchronously, start by grabbing your function of interest */
-
+//Grab you equation object
 var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
 
 /* Set up your data */
