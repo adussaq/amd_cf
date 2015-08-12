@@ -69,7 +69,7 @@
             if (itt === options.maxItt && Math.abs(1 - SSETot / lastItter) > options.minPer) {
                 success = 0;
             }
-            return {initParams: {mI: options.maxItt, mpC: options.minPer, pC: Math.abs(1 - SSETot / lastItter) }, success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
+            return {v: 1, initParams: {mI: options.maxItt, mpC: options.minPer, pC: Math.abs(1 - SSETot / lastItter) }, success: success, parameters: x0, totalSqrErrors: SSETot, R2: corrIsh, WWtest: runsTest(fun, X, y, x0)};
         };
 
         sqrSumOfErrors = function (fun, X, y, x0) {
@@ -139,7 +139,7 @@
 
         //Check for fitting parameters
         options = equationObj.func_fit_params || {};
-        options2 = equationObj.fit_params || {};
+        options2 = object.fit_params || {};
         for (p in options2) {
             if (options2.hasOwnProperty(p)) {
                 options[p] = options2[p];
