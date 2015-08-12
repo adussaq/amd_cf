@@ -120,7 +120,7 @@ var amd_ww = (function () {
             clearWorkers(callback);
         };
 
-        sublib.onComplete = function (callback) {
+        sublib.wait = function (callback) {
             /*////////////////////////////////////////////////////////////////////////////////
             This function sets the function to be called once all processes are complete
                 it MUST be called after all jobs have been submitted and must be passed a 
@@ -166,7 +166,11 @@ var amd_ww = (function () {
         };
 
         sublib.pause = function () {
-            superPause = true;
+            var callback = function () {
+                superPause = true;
+            };
+            jobsArray.push(['&&&onComplete&&&', callback]);
+            nextJob();
         };
 
         sublib.resume = function () {
