@@ -18,21 +18,18 @@
 				equation: eqStr,
 			}
 		</script>
-		<style>
-			pre {margin-top:-10px}
-		</style>
 	</head>
 	<body>
 		<h2>Open the console to test curve fitting with web workers!</h2>
 		<b>The following is the set up, this has already been done for you!</b>
-		<pre><code>
+		<pre style="margin-top: -10px;"><code>
 /* This has already been defined */
 var X = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]];
 var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
 var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
 </code></pre>
 <b>The following is the contents of simpleCubic.json</b>
-<pre><code>
+<pre style="margin-top: -10px;"><code>
 {
 	stringified: 'a * x ^ 3 + b',
 	func: function (xVector, P) {
@@ -49,7 +46,7 @@ var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2
 } 
 </code></pre>
 <b>Copy and paste this into your console to run this functions.</b>
-<pre><code>
+<pre style="margin-top: -10px;"><code>
 /* This is done asynchronously, start by grabbing your function of interest */
 
 var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
