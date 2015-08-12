@@ -1,5 +1,5 @@
 /*global console, window, Worker, amd_ww */
-var globww;
+
 //Passed JS-Lint - Alex Dussaq 2/20/2015
 var amd_ww = (function () {
     'use strict';
@@ -106,7 +106,6 @@ var amd_ww = (function () {
             return;
         };
         jobsArray = [];
-        globww = jobsArray;
         sublib = {};
         workersArr = [];
         paused = false;
@@ -222,7 +221,9 @@ var amd_ww = (function () {
                     if (jobsArray[i][0] === '&&&resume&&&') {
                         paused = true;
                         finishFunction = jobsArray[i][1];
+                        jobsArray.splice(i, 1);
                         post_callback();
+                        return;
                     }
                 }
             }
@@ -253,9 +254,6 @@ var amd_ww = (function () {
 
             //Make sure we are not paused
             if (paused  || superPause) {
-                if (typeof message !== "string" && (message !== '&&&onComplete&&&' || message !== '&&&resume&&&')) {
-                    finishFunction = callback;
-                }
                 workersArr[workerToStart][1] = false;
                 post_callback();
                 return;

@@ -146,7 +146,7 @@ var amd_cf = (function () {
                     console.log('All fitting completed!');
                 };
             }
-            worker.onComplete(callback);
+            worker.wait(callback);
         };
 
         evaleq = function (str) {
