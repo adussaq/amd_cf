@@ -174,7 +174,10 @@ var amd_ww = (function () {
         };
 
         sublib.resume = function () {
-            superPause = false;
+            var callback = function () {
+                superPause = false;
+            };
+            jobsArray.push(['&&&onComplete&&&', callback]);
             nextJob();
         };
 
