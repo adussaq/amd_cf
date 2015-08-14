@@ -18,7 +18,7 @@
 	var y1 = [1.12, 7.78, 27.09, 63.83, 124.93, 215.86, 343.22, 511.86, 729.06, 1000.19];
 	var y2 = [4.86, 19.14, 57.18, 131.12, 252.92, 435.2, 688.79, 1027.15, 1461.02, 2003.1];
 </code></pre>
-<b>The following is the minimum contents of simpleCubic.json</b> <br />Actual parameters set (all possible) can be seen at: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp">https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp</a>
+<b>The following is the minimum contents of simpleCubic.json</b> <br />Actual parameters set (all possible) can be seen at: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo">https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo</a>
 <pre style="margin-top: -10px;"><code>
 	{
 		func: function (xVector, P) {
@@ -36,7 +36,7 @@
 <b>Copy and paste this into your console to run this functions.</b>
 <pre style="margin-top: -10px;"><code>
 	//Grab you equation object
-	var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
+	var eq_obj = amd_cf.getEquation('simpleCubic.jseo');
 
 	/* Set up your data */
 	var data1 = {
@@ -47,7 +47,7 @@
 	var data2 = {
 		x_values: X,
 		y_values: y2,
-		fit_params: { // These are optional and will overwrite the func_fit_params found in the .jsonp file
+		fit_params: { // These are optional and will overwrite the func_fit_params found in the .jseo file
 			checkItt: 3,
 			maxItt: 100
 		}

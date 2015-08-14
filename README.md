@@ -6,13 +6,13 @@ The same example is shown below and is included as index.html in this directory.
 This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
 * workersPackage.js (amd_ww)
 * jquery-2.1.4.min.js (jQuery)
-* .jsonp (An **equation_obj**, described below)
+* .jseo (An **equation_obj**, described below)
 * fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
 ###**amd_cf**###
 |Property|Description|
 |---------------|----------------|
-|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jsonp __equation_obj__, described below*] and a **ge_callback** function [*optional, function, described below*]. Returns: __fitting_obj__ [*object*]|
+|getEquation|[*function*] This function takes two arguments and returns one. Inputs: **eq_url** [*required, string, this is the address of .jseo __equation_obj__, described below*] and a **ge_callback** function [*optional, function, described below*]. Returns: __fitting_obj__ [*object*]|
 
 
 ###**fitting_obj**###
@@ -20,8 +20,8 @@ This package allows for curve fitting (non-linear least squares regression) to b
 |---------------|----------------|
 |fitEquation|[*function*] This function takes two arguments. Input: **data_obj** [*required, object, more information below*] and a **fe_callback** [*optional, function, more information below*]. Return: via a **fit_res** to **fe_callback**[*object, described below*]|
 |doneFitting|[*function*] This is takes one argument, a function [*required*], called asynchronously once all already submitted jobs have been completed. It can be called as many times as needed throughout the course of the code, however minimizing it will maximize the speed at which results are returned.|
-|equation|[*equation*] This is the __equation_obj__ that is returned from the .jsonp file. NOTE: This is returned asyncronously, do not count on it to be there, also editing any component of it will **NOT** affect any downstream fitting, this is essentially a read only object.|
-|url|[*string*] This is the url used to grab the .jsonp __equation_obj__|
+|equation|[*equation*] This is the __equation_obj__ that is returned from the .jseo file. NOTE: This is returned asyncronously, do not count on it to be there, also editing any component of it will **NOT** affect any downstream fitting, this is essentially a read only object.|
+|url|[*string*] This is the url used to grab the .jseo __equation_obj__|
 
 ###**Callback Functions**###
 |Function|Description|
@@ -40,17 +40,17 @@ This package allows for curve fitting (non-linear least squares regression) to b
 |_other_|[*optional*] This may be any property you would like other than a function, it will be passed around with the data results.|
 
 ###equation_obj###
-This is a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jsonp. This is required for every function type that is to be fit.
+This is a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo. This is required for every function type that is to be fit.
 
 |Property|Description|
 |---------------|----------------|
 |**func|[*function, required*] This function must be set up to take two parameters: an X matrix (array of arrays) and a parameter vector. It should use these inputs to calculate a 'y' value and return a single number.|
 |**setInitial|[*function, required*] This function must be set up to take the X matrix and the y array that will be used for the modeling, then utilize these components to determine the initial parameters for the fit.|
 |**func_fit_params|[*object, optional*] This series of parameters describes the way all data passed into the fit function will be treated, more information below.|
-|**string|[*string, protected*] This element contains the entirety of the jsonp article as a string. Do not try to store information in a property of the same name, it will be overwritten|
+|**string|[*string, protected*] This element contains the entirety of the jseo article as a string. Do not try to store information in a property of the same name, it will be overwritten|
 |**_other_|[*optional*] This may be any property you would like, it will be passed around with the data results.|
 
-**Note: This cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
+**Note: This cannot be set dynamically, this must be set utilizing the jseo __equation_obj__ file.
 
 ###fit_params###
 This optional object will overwrite the default and the func_fit_params when possible.
@@ -64,14 +64,14 @@ This optional object will overwrite the default and the func_fit_params when pos
 |diverge|[*number, optional*] This is the slope with which the steps change when the steps are moving the model in the incorrect direction. Default: -0.5|
 
 ###func_fit_params###
-This optional object is set in a non dynamic fashion as part of the jsonp equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
+This optional object is set in a non dynamic fashion as part of the jseo equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called fit_params object.
 
 |Property|Description|
 |---------------|----------------|
 |**_general_|[*N/A, optional*] All parameters of __fit_params__ can be assigned here, these can not be dynamically changed and will be overwritten by __fit_params__ if utilized in the same fit.|
 |**step|[*function, optional*] This function should take the initial parameters array as determined by **equation_obj.setInitial** and return an array of initial steps. The default is to take the parameters and divide by 100, unless the parameter is 0 then 1e-3 is utilized as default|
 
-**Note: this cannot be set dynamically, this must be set utilizing the jsonp __equation_obj__ file.
+**Note: this cannot be set dynamically, this must be set utilizing the jseo __equation_obj__ file.
 
 ###fit_res###
 |Property|Description|
@@ -93,14 +93,14 @@ For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/
     };
 
     //Get equation object (defined below)
-    var eq_obj = amd_cf.getEquation('simpleCubic.jsonp');
+    var eq_obj = amd_cf.getEquation('simpleCubic.jseo');
 
     //Fits the data asynchronously
     eq_obj.fitEquation(data, function(res) {
         console.log('Done with data fit:', res);
     });
 
-##simpleCubic.jsonp##
+##simpleCubic.jseo##
     {
         func: function (xVector, P) {
             return P[0] * Math.pow(xVector[0],3) + P[1];
