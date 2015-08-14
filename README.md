@@ -6,7 +6,7 @@ The same example is shown below and is included as index.html in this directory.
 This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
 * workersPackage.js (amd_ww)
 * jquery-2.1.4.min.js (jQuery)
-* .jseo (**J**ava **S**cript **E**quation **O**bject, An **equation_obj**, described below)
+* .jseo (**J**ava**S**cript **E**quation **O**bject, An **equation_obj**, described below)
 * fitCurves.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
 ###**amd_cf**###
