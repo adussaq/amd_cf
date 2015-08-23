@@ -4,15 +4,15 @@ For a working example please go to: https://alexdussaq.info/amd_cf/<br />
 The same example is shown below and is included as index.html in this directory.
 
 This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
-* amd_ww-2.0.0.min.js (amd_ww)
+* amd_ww-2.0.0.min.js (<a href="https://github.com/adussaq/amd_ww">amd_ww</a>)
 * jquery-2.1.4.min.js (jQuery)
 * amd_cf_worker-1.2.1.min.js (This actually fits the data)
 * .jseo (**J**ava**S**cript **E**quation **O**bject, an <a href="https://github.com/adussaq/amd_cf#equation_obj">**equation_obj**</a>)
 * amd_cf-2.0.0.min.js (amd_cf, requires all of the above, does the work of running the curve fitting)
 
-This heavily utilizes javascript promises (polyfill is automatically provided in amd_core.js). For more information on javascript promise please start with: <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">HTML5 Rocks: Promises</a>
+This heavily utilizes javascript promises. For more information on javascript promise please start with: <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">HTML5 Rocks: Promises</a>
 
-<a href="https://github.com/adussaq/amd_cf# ">
+While not required for use <a href="https://github.com/adussaq/amd_core">amd_core</a> is recommended to insure promises are valid (automatically load promises polyfill as needed), jquery is loaded and that all packages are loaded in the correct order. If you choose not to utilize this then download the development version to edit the code accordingly.
 
 ###**amd_cf**###
 |Property|Description|
