@@ -113,7 +113,7 @@
     determineRunningConditions = function (object) {
         //variable declarations
         var options, options2, i, X, xIni, yIni, length, equationObj, hasBool, p, initParams;
-        equationObj = eval('equationObj=' + object.equation.string);
+        equationObj = eval('equationObj=' + object.equation);
         //variable defintions
         X = object.x_values;
         xIni = [];
