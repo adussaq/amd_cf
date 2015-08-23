@@ -1,9 +1,9 @@
 # amd_cf
 
-For a working example please go to: https://alexdussaq.info/amd_cf/<br />
+For a working example please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a><br />
 The same example is shown below and is included as index.html in this directory.
 
-This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (https://github.com/adussaq/amd_ww/) with a series of simple commands. <br />This requires a number of files:
+This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (<a href="https://github.com/adussaq/amd_ww">amd_ww</a>) with a series of simple commands. <br />This requires a number of files:
 * amd_ww-2.0.0.min.js (<a href="https://github.com/adussaq/amd_ww">amd_ww</a>)
 * jquery-2.1.4.min.js (jQuery)
 * amd_cf_worker-1.2.1.min.js (This actually fits the data)
@@ -43,7 +43,7 @@ This object inherits all properties from Promise with a few tweaks as well as th
 |_other_|[*optional*] This may be any property you would like other than a function, it will be passed around with the data results.|
 
 ###equation_obj###
-This can be a complicated object, for a full example please see: https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo. For a simple example please see below. This is required for every function type that is to be fit.
+This can be a complicated object, for a full example please see: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo">simpleCubic.jseo</a>. For a simple example please see below. This is required for every function type that is to be fit.
 
 |Property|Description|
 |---------------|----------------|
@@ -88,7 +88,7 @@ This optional object is set in a non dynamic fashion as part of the jseo equatio
 
 
 ##Minimal example of how to utilize tool.##
-For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/
+For a more flushed out version, please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a>
 
     // Data set up
     var data = {
@@ -116,4 +116,4 @@ For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/
         }
     }
 
-These modules were combined with the following visualization libraries: google chart tools (https://developers.google.com/chart/), jqmath (http://mathscribe.com/author/jqmath.html), and bootstrap (http://getbootstrap.com/) to create a tool to visualize individual curve fits for a unique biological data set. This is avaliable at http://kinome.github.io/demo-cf/#model.
+These modules were combined with the following visualization libraries:  <a href="https://developers.google.com/chart/">Google Chart Tools</a>), <a href="http://mathscribe.com/author/jqmath.html">jqmath</a>, and <a href="http://getbootstrap.com/">bootstrap</a> to create a tool to visualize individual curve fits for a unique biological data set. This is avaliable at <a href="http://kinome.github.io/demo-cf/#model">CF Real Life Demonstration</a>.
