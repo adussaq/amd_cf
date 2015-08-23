@@ -88,7 +88,7 @@ This optional object is set in a non dynamic fashion as part of the jseo equatio
 
 
 ##Minimal example of how to utilize tool.##
-For a more flushed out version, please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a>
+For a more flushed out version, or to try this code yourself, please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a>
 
     // Data set up
     var data = {
