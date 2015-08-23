@@ -1,7 +1,7 @@
 # amd_cf
 
-For a working example please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a><br />
-The same example is shown below and is included as index.html in this directory.
+For a thorough working example please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a>This is included as index.html in this directory.<br />
+A simple example is shown <a href="https://github.com/adussaq/amd_cf#minimal-example-of-how-to-utilize-tool">below</a>.
 
 This package allows for curve fitting (non-linear least squares regression) to be done within JavaScript Web Workers (<a href="https://github.com/adussaq/amd_ww">amd_ww</a>) with a series of simple commands. <br />This requires a number of files:
 * amd_ww-2.0.0.min.js (<a href="https://github.com/adussaq/amd_ww">amd_ww</a>)
