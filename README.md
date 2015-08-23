@@ -100,7 +100,7 @@ For a more flushed out version, please go to: https://alexdussaq.info/amd_cf/
     var eq_obj = amd_cf.getEquation('simpleCubic.jseo');
 
     //Fits the data asynchronously
-    eq_obj.fitEquation(data, function(res) {
+    eq_obj.fit(data).then(function(res) {
         console.log('Done with data fit:', res);
     });
 
