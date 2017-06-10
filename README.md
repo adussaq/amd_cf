@@ -15,12 +15,14 @@ This heavily utilizes javascript promises. For more information on javascript pr
 While not required for use <a href="https://github.com/adussaq/amd_core">amd_core</a> is recommended to insure promises are valid (automatically load promises polyfill as needed), jquery is loaded and that all packages are loaded in the correct order. If you choose not to utilize this then download the development version to edit the code accordingly.
 
 ###**amd_cf**###
+
 |Property|Description|
 |---------------|----------------|
 |getEquation|[*function*] Inputs: **eq_url** [*required, string], the address of the .jseo <a href="https://github.com/adussaq/amd_cf#equation_obj">__equation_obj__</a>.  Return: <a href="https://github.com/adussaq/amd_cf#fitting_obj">__fitting_obj__</a> [*object*] the thenable promise object responsible for starting jobs.|
 
 
 ###**fitting_obj**###
+
 This object inherits all properties from Promise with a few tweaks as well as the 'then' and 'catch' functions of the equation promise. For more on promises try starting here: <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">HTML5 Rocks: Promises</a>
 
 |Property|Description|
@@ -34,6 +36,7 @@ This object inherits all properties from Promise with a few tweaks as well as th
 |url|[*string*] This is the url used to grab the .jseo <a href="https://github.com/adussaq/amd_cf#equation_obj">__equation_obj__</a>|
 
 ###data_obj###
+
 |Property|Description|
 |---------------|----------------|
 |x_values|[*required, 2D array of doubles*] X=[[x1],[x2],[x3]...[xn]], where y=f(X)*|
@@ -43,6 +46,7 @@ This object inherits all properties from Promise with a few tweaks as well as th
 |_other_|[*optional*] This may be any property you would like other than a function, it will be passed around with the data results.|
 
 ###equation_obj###
+
 This can be a complicated object, for a full example please see: <a href="https://github.com/adussaq/amd_cf/blob/gh-pages/simpleCubic.jseo">simpleCubic.jseo</a>. For a simple example please see below. This is required for every function type that is to be fit.
 
 |Property|Description|
@@ -55,6 +59,7 @@ This can be a complicated object, for a full example please see: <a href="https:
 **Note: This cannot be set dynamically, this must be set utilizing the jseo __equation_obj__ file.
 
 ###fit_params###
+
 This optional object will overwrite the default and the <a href="https://github.com/adussaq/amd_cf#func_fit_params">func_fit_params</a> when avaliable.
 
 |Property|Description|
@@ -66,6 +71,7 @@ This optional object will overwrite the default and the <a href="https://github.
 |diverge|[*number, optional*] This is the slope with which the steps change when the steps are moving the model in the incorrect direction. Default: -0.5|
 
 ###func_fit_params###
+
 This optional object is set in a non dynamic fashion as part of the jseo equation object. Elements by the same name that are declared in fit_params will be overwritten by the dynamically called <a href="https://github.com/adussaq/amd_cf#fit_params">fit_params</a> object.
 
 |Property|Description|
@@ -76,6 +82,7 @@ This optional object is set in a non dynamic fashion as part of the jseo equatio
 **Note: this cannot be set dynamically, this must be set utilizing the jseo <a href="https://github.com/adussaq/amd_cf#equation_obj">__equation_obj__</a> file.
 
 ###fit_res###
+
 |Property|Description|
 |---------------|----------------|
 |parameters|[*array*] The solution for the fit.|
@@ -88,6 +95,7 @@ This optional object is set in a non dynamic fashion as part of the jseo equatio
 
 
 ##Minimal example of how to utilize tool.##
+
 For a more flushed out version, or to try this code yourself, please go to: <a href="https://alexdussaq.info/amd_cf/">Test amd_cf</a>
 
     // Data set up
@@ -105,6 +113,7 @@ For a more flushed out version, or to try this code yourself, please go to: <a h
     });
 
 ##simpleCubic.jseo##
+
     {
         func: function (xVector, P) {
             return P[0] * Math.pow(xVector[0],3) + P[1];
